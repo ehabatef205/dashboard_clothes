@@ -1,0 +1,13 @@
+.App {
+  height: 100%;
+  display: flex;
+}
+
+.headerone{
+position:relative ;
+top:20% 
+;padding:5% ; 
+border :1px solid gray ;
+box-shadow: 3px 3px 8px rgba(0, 0, 0, 0.5);
+    border-radius: 20px;
+}

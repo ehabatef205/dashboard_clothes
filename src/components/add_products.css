@@ -1,0 +1,24 @@
+.items {
+    display: flex;
+    flex-wrap: wrap;
+    margin: 0 auto;
+    width: 100%;
+    max-width: 1200px;
+    padding: 0 15px;
+
+}
+.add{
+    position:relative ;
+    flex-wrap: wrap;
+    display:flex;
+    height:  fit-content;
+    padding:2% ; 
+    border :1px solid gray ;
+    box-shadow: 3px 3px 8px rgba(0, 0, 0, 0.5);
+        border-radius: 20px;
+    }
+
+
+    .addheder{
+        height: fit-content;
+    }

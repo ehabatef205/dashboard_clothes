@@ -1,0 +1,30 @@
+.left-panel {
+    width: 30%;
+    height: 100%;
+    float: left;
+    background-color: #7DCEA0;
+    border-right: 2px solid gray;
+    padding: 1%;
+    color:white;
+
+}
+.left-sub-item {
+    margin: 5%;
+    border-bottom: 2px solid white;
+
+}
+.left-panel-item ul li:hover {
+    background-color: #f0f0f0;
+    cursor: pointer;
+    color: black;
+    border-radius: 20px;
+
+}
+
+.left-panel-item ul {
+    list-style-type: none;
+}
+
+.left-panel-item ul li {
+    padding-left: 15px; /* Add some padding for visual separation */
+}
