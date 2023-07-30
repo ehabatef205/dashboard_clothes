@@ -1,9 +1,38 @@
 import axios from 'axios'
-import {backend_url} from '../config'
+import { backend_url } from '../config'
 const proxy = `${backend_url}/product`
 
-export const add_product = async ({Product_name, Product_desc, Product_SKU, Product_category_id, quantity, Product_price, Product_discount_id}) => {
-    await axios.post(`${proxy}`,{Product_name, Product_desc, Product_SKU, Product_category_id, quantity, Product_price, Product_discount_id})
+export const add_product = async (supplier_id, category_id, subCategory, typeOfProduct, name, quantity, SKU, price_before, price_after, imageSrc, color, type, nameOfBrand, logo, description, s, m, l, xl, xxl) => {
+    await axios.post(`${proxy}`,
+        {
+            supplier_id: supplier_id,
+            category_id: category_id,
+            subCategory: subCategory,
+            typeOfProduct: typeOfProduct,
+            name: name,
+            quantity: quantity,
+            SKU: SKU,
+            price_before: price_before,
+            price_after: price_after,
+            imageSrc: imageSrc,
+            desc: {
+                color: color,
+                type: type,
+                brand: {
+                    name: nameOfBrand,
+                    logo: logo,
+                },
+                description: description,
+            },
+            sizes: {
+                s: s,
+                m: m,
+                l: l,
+                xl: xl,
+                xxl: xxl
+            },
+            view: true
+        })
 }
 
 export const all_product = async () => {
@@ -18,16 +47,45 @@ export const delete_product = async (_id) => {
     await axios.delete(`${proxy}/${_id}`)
 }
 
-export const update_product = async (_id, {Product_name, Product_desc, Product_SKU, Product_category_id, quantity, Product_price, Product_discount_id}) => {
-    await axios.put(`${proxy}/${_id}`, {Product_name, Product_desc, Product_SKU, Product_category_id, quantity, Product_price, Product_discount_id})
+export const update_product = async (_id, typeOfProduct, name, quantity, SKU, price_before, price_after, imageSrc, color, type, nameOfBrand, logo, description, s, m, l, xl, xxl) => {
+    await axios.put(`${proxy}/${_id}`, {
+        typeOfProduct: typeOfProduct,
+        name: name,
+        quantity: quantity,
+        SKU: SKU,
+        price_before: price_before,
+        price_after: price_after,
+        imageSrc: imageSrc,
+        desc: {
+            color: color,
+            type: type,
+            brand: {
+                name: nameOfBrand,
+                logo: logo,
+            },
+            description: description,
+        },
+        sizes: {
+            s: s,
+            m: m,
+            l: l,
+            xl: xl,
+            xxl: xxl
+        },
+        view: true
+    })
 }
 
-export const get_product_by_category =  async (_id) => {
+export const update_view_product = async (id, view) => {
+    await axios.put(`${proxy}/view/${id}`, { view: view })
+}
+
+export const get_product_by_category = async (_id) => {
     return (await (await axios.get(`${proxy}/category/${_id}`)).data)
 }
 
-export const get_product_by_type =  async (_id,type) => {
-    return (await (await axios.post(`${proxy}/type/${_id}`,{typeOfProduct:type})).data)
+export const get_product_by_type = async (_id, type) => {
+    return (await (await axios.post(`${proxy}/type/${_id}`, { typeOfProduct: type })).data)
 }
 
 

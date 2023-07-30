@@ -30,25 +30,25 @@ export default function ViewSubCategory(props) {
                 <div style={{ display: "inline-block", fontSize: "20px" }}>
                     {props.name}
                 </div>
-                {open? <AiOutlineUp style={{ fontSize: "20px" }} /> : <AiOutlineDown style={{ fontSize: "20px" }} />}
+                {open ? <AiOutlineUp style={{ fontSize: "20px" }} /> : <AiOutlineDown style={{ fontSize: "20px" }} />}
             </div>
-            {open? <div style={{ width: "100%" }}>
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>index</th>
-                                <th>Name</th>
-                                <th>Update</th>
-                                <th>Delete</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {subCategories.map((subCategory, index) => (
-                                <TableOfProduct key={index} index={index + 1} id={subCategory._id} name={subCategory.name} />
-                            ))}
-                        </tbody>
-                    </table>
-                </div> : <></>}
+            {open ? <div style={{ width: "100%" }}>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>index</th>
+                            <th>Name</th>
+                            <th>Update</th>
+                            <th>Delete</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {subCategories.map((subCategory, index) => (
+                            <TableOfProduct key={index} index={index + 1} id={subCategory._id} name={subCategory.name} />
+                        ))}
+                    </tbody>
+                </table>
+            </div> : <></>}
         </>
     );
 }
