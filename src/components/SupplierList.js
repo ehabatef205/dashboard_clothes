@@ -33,7 +33,7 @@ function SupplierList() {
             <div className="add   ">
                 <div className="w-100  addheder col-12" style={{ borderBottom: "1px solid gray", textAlign: "center" }} >
                     {" "}
-                    <h1>View Main Category</h1>
+                    <h1>suppliers</h1>
                 </div>
                 <div style={{ width: "100%" }}>
                     <table>
@@ -48,7 +48,7 @@ function SupplierList() {
                             {suppliers.map((supplier, index) => (
                                  <tr>
                                  <td>{supplier.name}</td>
-                                 <td><input value={supplier.email} type="text"  /></td>
+                                 <td><i> {supplier.email}   </i></td>
                                  <td>{supplier.enabled ? (<MdDoneOutline style={{ fontSize: "25px", cursor: "pointer" }} onClick={() => { disable(supplier._id,supplier.name) }} />):
                                  (<MdOutlineRemoveDone style={{ fontSize: "25px", cursor: "pointer" }} onClick={() => { enable(supplier._id,supplier.name) }}/>)}</td>
                              </tr>
