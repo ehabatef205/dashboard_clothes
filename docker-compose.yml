@@ -1,0 +1,24 @@
+version: "3.1"
+services:
+  react:
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    container_name: React_Admin_dash_container
+    volumes:
+      - ./src:/React_Admin_dash/src:ro
+    ports:
+      - "3020:3020"
+    environment:
+      - NODE_ENV=production
+    restart: always
+
+  nginx:
+    build:
+      context: ./
+      dockerfile: Dockerfile.nginx
+    # volumes:
+    #     - ./Care_Frontend/build:/usr/share/nginx/html:ro
+    ports:
+      - 84:80
+    restart: always
