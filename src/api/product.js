@@ -40,7 +40,7 @@ export const add_product_from_excel = async (excel) => {
 }
 
 export const add_products_from_excel = async (products) => {
-    await axios.post(`${proxy}/from_excel`, {products: products})
+    await axios.post(`${proxy}/from_excel`, { products: products })
 }
 
 export const all_product = async () => {
@@ -89,7 +89,7 @@ export const update_view_product = async (id, view) => {
 }
 
 export const get_product_by_category = async (_id) => {
-    return (await (await axios.get(`${proxy}/category/${_id}`)).data)
+    return (await (await axios.get(`${proxy}/category2/${_id}`)).data)
 }
 
 export const get_product_by_type = async (_id, type) => {
