@@ -11,6 +11,7 @@ import HiddenProduct from './components/HiddenProduct';
 import CreateSupplier from './components/create supplier';
 import SupplierList from './components/SupplierList';
 import Login from './dir/login';
+import AddProductFromExcel from './components/AddProductFormExcel';
 
 function App() {
   const [page, setPage] = useState('#')
@@ -29,6 +30,7 @@ function App() {
           {page === 'View Main Category' && <MainCategory />}
           {page === 'View Sub Category' && <SubCategory />}
           {page === 'Add Product' && <AddProduct />}
+          {page === 'Add Product from excel' && <AddProductFromExcel />}
           {page === 'Hidden Product' && <HiddenProduct />}
           {page === 'Delete Product' && <DeleteProduct />}
           {page === 'Update Product' && <UpdateProduct />}

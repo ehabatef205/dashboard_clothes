@@ -22,6 +22,7 @@ function DeleteProduct() {
 
   const handleSelectSuCategory = (event) => {
     setSelectedSubCategoryValue(event.target.value);
+    getProducts(event.target.value)
   };
 
   useEffect(() => {

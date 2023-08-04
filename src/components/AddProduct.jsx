@@ -71,7 +71,11 @@ function AddProduct() {
   const getSubCategory = async (id) => {
     await sub_category.all_sub_category(id).then(e => {
       setSubCategories(e.response)
-      setSelectedSubCategoryValue(e.response[0]._id)
+      if (e.response.length !== 0) {
+        setSelectedSubCategoryValue(e.response[0]._id)
+      } else {
+        setSelectedSubCategoryValue("")
+      }
     })
   }
 
