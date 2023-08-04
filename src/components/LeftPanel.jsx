@@ -43,6 +43,9 @@ function LeftPanel({ setpage }) {
           <ul>
             <li onClick={changePage}>Orders</li>
           </ul>
+          <ul>
+            <li onClick={changePage}>Returns</li>
+          </ul>
         </div>
         <div className='left-panel-item left-sub-item'>
           <h4>Users</h4>
