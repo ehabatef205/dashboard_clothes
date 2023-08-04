@@ -51,7 +51,7 @@ function AddProductFromExcel() {
     }, [])
 
     const getDataFromExcel = async () => {
-        const url = 'http://localhost:5000/product/excel';
+        const url = 'http://5.183.9.124:5000/product/excel';
         const formData = new FormData();
         formData.append('excel', excel);
         formData.append('category_id', selectedCategoryValue);
