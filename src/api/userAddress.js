@@ -4,7 +4,7 @@ import {Cookies} from 'react-cookie'
 const proxy = `${backend_url}/user-address`
 
 const cookie = new Cookies()
-const token = cookie.get('Auth')
+const token = cookie.get('AuthAdmin')
 
 export const view_user_payment = async () => {
     return (await axios.get(`${proxy}/view_user_address`, {headers: { 'Authorization': token }})).data

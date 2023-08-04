@@ -17,13 +17,13 @@ export default function Login({ onLogin }) {
 
     const logIn = async () => {
         setLoading(true);
-        cookie.remove("Auth")
+        cookie.remove("AuthAdmin")
         await admin.login({ email: emailRef.current.value, password: passwordRef.current.value }).then(async (res) => {
             const message = res.data.message;
 
             if (message === 'Login Successful!') {
                 setLoading(false);
-                cookie.set("Auth", "Bearer " + res.data.token);
+                cookie.set("AuthAdmin", "Bearer " + res.data.token);
                 console.log(res.data.token)
                 onLogin()
             } else if (message === "Id or password is invalid") {

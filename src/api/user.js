@@ -4,7 +4,7 @@ import {Cookies} from 'react-cookie'
 const proxy = `${backend_url}/user`
 
 const cookie = new Cookies()
-const token = cookie.get('Auth')
+const token = cookie.get('AuthAdmin')
 
 export const sign_up = async ({username, email, password, first_name, last_name, telephone}) => {
     return((await axios.post(`${proxy}/sign_up`,{username, email, password, first_name, last_name, telephone})).data)
