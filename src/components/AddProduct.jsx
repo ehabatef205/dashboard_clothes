@@ -3,11 +3,13 @@ import "./add_products.css";
 import * as main_category from '../api/product_category'
 import * as sub_category from '../api/subcategory'
 import * as product from '../api/product'
+import axios from "axios";
 
 function AddProduct() {
 
   const integerValues = [1, 2, 3, 4, 5];
   const [images, setImages] = useState(Array(5).fill(""));
+  const [image, setImage] = useState([])
   const [selectedValue, setSelectedValue] = useState(1);
 
   const [categories, setCategories] = useState([])
@@ -21,7 +23,7 @@ function AddProduct() {
 
   const [brandLogo, setBrandLogo] = useState("")
 
-  const [formData, setFormData] = useState({
+  const [formData1, setFormData] = useState({
     supplier_id: "",
     name: "",
     quantity: 0,
@@ -80,30 +82,42 @@ function AddProduct() {
   }
 
   const addProduct = async () => {
-    await product.add_product(
-      "64c143a99cc379663282c26b",
-      selectedCategoryValue,
-      selectedSubCategoryValue,
-      selectedTypeValue,
-      formData.name,
-      formData.quantity,
-      formData.SKU,
-      formData.price_before,
-      formData.price_after,
-      images.slice(0, selectedValue),
-      formData.color,
-      formData.type,
-      formData.nameOfBrand,
-      brandLogo,
-      formData.description,
-      formData.s,
-      formData.m,
-      formData.l,
-      formData.xl,
-      formData.xxl
-    ).then(e => {
+    const url = 'http://localhost:5000/product/upload';
+    const formData = new FormData();
+    for (let file of image) {
+      formData.append('images', file);
+    }
+    formData.append('category_id', selectedCategoryValue);
+    formData.append('subCategory', selectedSubCategoryValue);
+    formData.append('typeOfProduct', selectedTypeValue);
+    formData.append('name', formData1.name);
+    formData.append('quantity', formData1.quantity);
+    formData.append('SKU', formData1.SKU);
+    formData.append('price_before', formData1.price_before);
+    formData.append('price_after', formData1.price_after);
+    formData.append('color', formData1.color)
+    formData.append('type', formData1.type)
+    formData.append('nameOfBrand', formData1.nameOfBrand)
+    formData.append('description', formData1.description)
+    formData.append('color', formData1.color)
+    formData.append('s', formData1.s)
+    formData.append('m', formData1.l)
+    formData.append('l', formData1.l)
+    formData.append('xl', formData1.xl)
+    formData.append('xxl', formData1.xxl)
+
+    const config = {
+      headers: {
+        'content-type': 'multipart/form-data',
+      },
+    };
+    axios.post(url, formData, config).then((response) => {
       window.location.reload(false);
-    })
+    });
+  }
+
+  function handleChange(event) {
+    setImage([...image, event.target.files[0]])
   }
 
   return (
@@ -112,7 +126,7 @@ function AddProduct() {
         <div className="w-100  addheder col-12" style={{ borderBottom: "1px solid gray", textAlign: "center" }} >
           <h1>Add Product</h1>
         </div>
-        <form className=" col-12 h-75 my-5 ">
+        <div className=" col-12 h-75 my-5 ">
           <div
             className="d-flex flex-wrap "
           >
@@ -172,12 +186,12 @@ function AddProduct() {
                 className="w-50 btn"
                 type="text"
                 name="name"
-                value={formData?.name}
+                value={formData1?.name}
                 id="name"
                 placeholder="Enter Name"
                 onChange={(e) =>
                   setFormData({
-                    ...formData,
+                    ...formData1,
                     name: e.target.value,
                   })
                 }
@@ -192,12 +206,12 @@ function AddProduct() {
                 style={{ border: "1px solid gray" }} className="w-50 btn"
                 type="number"
                 name="quantity"
-                value={formData?.quantity}
+                value={formData1?.quantity}
                 id="quantity"
                 placeholder="Enter Quantity"
                 onChange={(e) =>
                   setFormData({
-                    ...formData,
+                    ...formData1,
                     quantity: e.target.value,
                   })
                 }
@@ -212,13 +226,13 @@ function AddProduct() {
               <input style={{ border: "1px solid gray" }}
                 className="w-50 btn"
                 type="text"
-                value={formData?.SKU}
+                value={formData1?.SKU}
                 name="SKU"
                 id="SKU"
                 placeholder="Enter SKU"
                 onChange={(e) =>
                   setFormData({
-                    ...formData,
+                    ...formData1,
                     SKU: e.target.value,
                   })
                 }
@@ -233,13 +247,13 @@ function AddProduct() {
               <input style={{ border: "1px solid gray" }}
                 className="w-50 btn"
                 type="number"
-                value={formData?.price_before}
+                value={formData1?.price_before}
                 name="priceBefore"
                 id="priceBefore"
                 placeholder="Enter Price Before"
                 onChange={(e) =>
                   setFormData({
-                    ...formData,
+                    ...formData1,
                     price_before: e.target.value,
                   })
                 }
@@ -252,13 +266,13 @@ function AddProduct() {
               <input style={{ border: "1px solid gray" }}
                 className="w-50 btn"
                 type="number"
-                value={formData?.price_after}
+                value={formData1?.price_after}
                 name="priceAfter"
                 id="priceAfter"
                 placeholder="Enter Price After"
                 onChange={(e) =>
                   setFormData({
-                    ...formData,
+                    ...formData1,
                     price_after: e.target.value,
                   })
                 }
@@ -273,13 +287,13 @@ function AddProduct() {
               <input style={{ border: "1px solid gray" }}
                 className="w-50 btn"
                 type="text"
-                value={formData?.color}
+                value={formData1?.color}
                 name="color"
                 id="color"
                 placeholder="Enter Color"
                 onChange={(e) =>
                   setFormData({
-                    ...formData,
+                    ...formData1,
                     color: e.target.value,
                   })
                 }
@@ -292,14 +306,14 @@ function AddProduct() {
               </label>
               <input style={{ border: "1px solid gray" }}
                 className="w-50 btn"
-                value={formData?.type}
+                value={formData1?.type}
                 type="text"
                 name="type"
                 id="type"
                 placeholder="Enter Type"
                 onChange={(e) =>
                   setFormData({
-                    ...formData,
+                    ...formData1,
                     type: e.target.value,
                   })
                 }
@@ -313,13 +327,13 @@ function AddProduct() {
               <input style={{ border: "1px solid gray" }}
                 className="w-50 btn"
                 type="text"
-                value={formData?.nameOfBrand}
+                value={formData1?.nameOfBrand}
                 name="brandName"
                 id="brandName"
                 placeholder="Enter Brand Name"
                 onChange={(e) =>
                   setFormData({
-                    ...formData,
+                    ...formData1,
                     nameOfBrand: e.target.value,
                   })
                 }
@@ -331,23 +345,8 @@ function AddProduct() {
                 <label className="w-50" htmlFor="brandLogoSrc">
                   Brand Logo Source
                 </label>
-                <input style={{ border: "1px solid gray" }}
-                  className="w-50 btn"
-                  type="text"
-                  name="brandLogoSrc"
-                  value={brandLogo}
-                  id="brandLogoSrc"
-                  placeholder="Enter Brand Logo Source"
-                  onChange={(e) => setBrandLogo(e.target.value)}
-                  required
-                />
+                <input type="file" onChange={handleChange} />
               </div>
-              <img
-                style={{ width: "50%" }}
-                src={brandLogo}
-                className="my-3 mx-3"
-                alt={"Please enter link of image"}
-              />
             </div>
             <div className="col-12 m-2 ">
               <label className="w-50" htmlFor="description">
@@ -358,10 +357,11 @@ function AddProduct() {
                 type="text"
                 name="description"
                 id="description"
+                value={formData1?.description}
                 placeholder="Enter description"
                 onChange={(e) =>
                   setFormData({
-                    ...formData,
+                    ...formData1,
                     description: e.target.value,
                   })
                 }
@@ -379,12 +379,12 @@ function AddProduct() {
                 className="w-50 btn"
                 type="number"
                 name="Quantity of s"
-                value={formData?.s}
+                value={formData1?.s}
                 id="Quantity of s"
                 placeholder="Enter Quantity of s"
                 onChange={(e) =>
                   setFormData({
-                    ...formData,
+                    ...formData1,
                     s: e.target.value,
                   })
                 }
@@ -399,12 +399,12 @@ function AddProduct() {
                 className="w-50 btn"
                 type="number"
                 name="Quantity of m"
-                value={formData?.m}
+                value={formData1?.m}
                 id="Quantity of m"
                 placeholder="Enter Quantity of m"
                 onChange={(e) =>
                   setFormData({
-                    ...formData,
+                    ...formData1,
                     m: e.target.value,
                   })
                 }
@@ -419,12 +419,12 @@ function AddProduct() {
                 className="w-50 btn"
                 type="number"
                 name="Quantity of l"
-                value={formData?.l}
+                value={formData1?.l}
                 id="Quantity of l"
                 placeholder="Enter Quantity of l"
                 onChange={(e) =>
                   setFormData({
-                    ...formData,
+                    ...formData1,
                     l: e.target.value,
                   })
                 }
@@ -439,12 +439,12 @@ function AddProduct() {
                 className="w-50 btn"
                 type="number"
                 name="Quantity of xl"
-                value={formData?.xl}
+                value={formData1?.xl}
                 id="Quantity of xl"
                 placeholder="Enter Quantity of xl"
                 onChange={(e) =>
                   setFormData({
-                    ...formData,
+                    ...formData1,
                     xl: e.target.value,
                   })
                 }
@@ -459,12 +459,12 @@ function AddProduct() {
                 className="w-50 btn"
                 type="number"
                 name="Quantity of xxl"
-                value={formData?.xxl}
+                value={formData1?.xxl}
                 id="Quantity of xxl"
                 placeholder="Enter Quantity of xxl"
                 onChange={(e) =>
                   setFormData({
-                    ...formData,
+                    ...formData1,
                     xxl: e.target.value,
                   })
                 }
@@ -489,45 +489,22 @@ function AddProduct() {
             </div>
             {Array.isArray(images) &&
               images?.map((img, index) =>
-                index < selectedValue ? (
-                  <div key={index} style={{ width: "100%" }}>
-                    <div className="col-12 m-2 ">
-                      <label className="w-50" htmlFor="description">
-                        Image {index + 1}
-                      </label>
-                      <input style={{ border: "1px solid gray" }}
-                        className="w-50 btn"
-                        type="text"
-                        name={`Image ${index + 1}`}
-                        id={`Image ${index + 1}`}
-                        placeholder={`Image ${index + 1}`}
-                        value={img}
-                        onChange={(e) =>
-                          setImages((prevImages) => {
-                            const updatedImages = [...prevImages];
-                            updatedImages[index] = e.target.value;
-                            return updatedImages;
-                          })
-                        }
-                        required
-                      />
-                    </div>
-                    <img
-                      style={{ width: "50%" }}
-                      className="my-3 mx-3"
-                      src={img}
-                      alt={"Please enter link of image"}
-                    />
+              (
+                <div key={index} style={{ width: "100%" }}>
+                  <div className="col-12 m-2 ">
+                    <label className="w-50" htmlFor="description">
+                      Image {index + 1}
+                    </label>
+                    <input type="file" onChange={handleChange} />
                   </div>
-                ) : (
-                  <div key={index}></div>
-                )
+                </div>
+              )
               )}
             <button type="submit" className="col-12 m-1 my-4 btn btn-secondary  " onClick={() => { addProduct() }}>
               Add Product
             </button>
           </div>
-        </form>
+        </div>
       </div>
     </div>
   );

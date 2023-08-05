@@ -13,7 +13,7 @@ export default function ViewSubCategory(props) {
 
     useEffect(() => {
         const getCategory = async () => {
-            await sub_category.all_sub_category(props.id).then(e => {
+            await sub_category.all_sub_category2(props.id).then(e => {
                 setSubCategories(e.response)
             })
         }
@@ -39,12 +39,12 @@ export default function ViewSubCategory(props) {
                             <th>index</th>
                             <th>Name</th>
                             <th>Update</th>
-                            <th>Delete</th>
+                            <th>View</th>
                         </tr>
                     </thead>
                     <tbody>
                         {subCategories.map((subCategory, index) => (
-                            <TableOfProduct key={index} index={index + 1} id={subCategory._id} name={subCategory.name} />
+                            <TableOfProduct key={index} index={index + 1} id={subCategory._id} name={subCategory.name} view={subCategory.view} />
                         ))}
                     </tbody>
                 </table>

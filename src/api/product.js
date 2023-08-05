@@ -3,7 +3,7 @@ import { backend_url } from '../config'
 const proxy = `${backend_url}/product`
 
 export const add_product = async (supplier_id, category_id, subCategory, typeOfProduct, name, quantity, SKU, price_before, price_after, imageSrc, color, type, nameOfBrand, logo, description, s, m, l, xl, xxl) => {
-    await axios.post(`${proxy}`,
+    await axios.post(`${proxy}/upload`,
         {
             supplier_id: supplier_id,
             category_id: category_id,
