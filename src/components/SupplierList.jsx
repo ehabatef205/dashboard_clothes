@@ -1,9 +1,8 @@
 import { React, useState, useEffect } from "react";
 import * as supplier from '../api/supplier_access'
-import TrTable from "./trTable";
 import "./table.css"
-import { MdDoneOutline, MdOutlineDoneOutline } from "react-icons/md"
-import { MdOutlineRemoveDone } from "react-icons/md"
+import { MdDoneOutline,MdOutlineRemoveDone  } from "react-icons/md"
+
 
 
 

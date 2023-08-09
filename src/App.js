@@ -14,7 +14,7 @@ import Login from './dir/login';
 import AddProductFromExcel from './components/AddProductFormExcel';
 import Orders from './components/orders';
 import Returns from './components/returns';
-
+import UserView from './components/users';
 
 function App() {
   const [page, setPage] = useState('#')
@@ -39,7 +39,9 @@ function App() {
           {page === 'Update Product' && <UpdateProduct />}
           {page === 'Orders' && <Orders/>}
           {page === 'Returns' && <Returns/>}
+          {page === 'Shipping' && <h1 className='d-flex bg-light mx-5  h-50 headerone'>Operation Under Design</h1>}
           {page === 'Analytics' && <h1 className='d-flex bg-light mx-5  h-50 headerone'>welcome to our admin panel please choose what to do from the side panel.</h1>}
+          {page === 'Users' && <UserView />}
           {page === 'Pan User' && <PanUser />}
           {page === 'Create Supplier' && <CreateSupplier />}
           {page === 'Edit Suppliers' && <SupplierList />}

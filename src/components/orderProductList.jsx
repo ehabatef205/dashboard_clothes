@@ -11,7 +11,7 @@ export default function OrderProductList(props) {
         {props.products.map((product)=>(
             <tr>
                 <td>{product.name}</td>
-                <td>   <img src={product.image}></img></td>
+                <td>   <img style={{width:"200px"}}src={product.image}></img></td>
                 <td>count:{product.quantity}</td>
                 <td>SKU:{product.SKU}</td>
             </tr>)

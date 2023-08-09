@@ -48,16 +48,23 @@ function LeftPanel({ setpage }) {
           </ul>
         </div>
         <div className='left-panel-item left-sub-item'>
-          <h4>Users</h4>
+          <h4>User</h4>
           <ul>
+            <li onClick={changePage}>Users</li>
             <li onClick={changePage}>Pan User</li>
           </ul>
         </div>
         <div className='left-panel-item left-sub-item'>
-          <h4>Supplies</h4>
+          <h4>Suppliers</h4>
           <ul>
             <li onClick={changePage}>Create Supplier</li>
             <li onClick={changePage}>Edit Suppliers</li>
+          </ul>
+        </div>
+        <div className='left-panel-item left-sub-item'>
+          <h4>Shipping</h4>
+          <ul>
+            <li onClick={changePage}>Shipping</li>
           </ul>
         </div>
         <div className='left-panel-item left-sub-item'>
