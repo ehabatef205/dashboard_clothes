@@ -53,6 +53,9 @@ export default function ViewOrders(props) {
           {props.order.status}
         </td>
         <td >
+          {props.order.email}
+        </td>
+        <td >
           {props.order.totalPrice}
         </td>
         

@@ -12,6 +12,6 @@ export const login = async ({email, password}) => {
 }
 export const auth = async () => {
     const token = cookie.get('AuthAdmin')
-    return  (await( await axios.post(`${proxy}/checkauth`,{},{headers: { 'Authorization': token }})).data)
+    return  (await( await axios.get(`${proxy}/checkauth`,{headers: { 'Authorization': token }})).data)
 }
 

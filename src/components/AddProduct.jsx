@@ -66,7 +66,7 @@ function AddProduct() {
   const [formData1, setFormData] = useState({
     supplier_id: "",
     name: "",
-
+    quantity:0,
     SKU: "",
     price_before: 0,
     price_after: 0,
@@ -142,7 +142,7 @@ function AddProduct() {
     formData.append('SKU', formData1.SKU);
     formData.append('price_before', formData1.price_before);
     formData.append('price_after', formData1.price_after);
-
+    formData.append('quantity', formData1.quantity);
     formData.append('type', formData1.type)
     formData.append('nameOfBrand', formData1.nameOfBrand)
     formData.append('description',JSON.stringify( formData1.description))
@@ -462,7 +462,27 @@ else{return<></>}
                 ))}
                         </select></div>
             
-            {clothing && <Clothingtrue/>}
+            {clothing ?<Clothingtrue/>:
+            
+            <div className="col-12 m-2 " >
+              <label className="w-50" htmlFor="quantity">
+                quantity
+              </label>
+              <input style={{ border: "1px solid gray" }}
+                className="w-50 btn"
+                type="number"
+                value={formData1?.quantity}
+                name="priceBefore"
+                id="priceBefore"
+                placeholder="Enter Price Before"
+                onChange={(e) =>
+                  setFormData({
+                    ...formData1,
+                    quantity: e.target.value,
+                  })
+                }
+                required />
+            </div>}
             <div className="col-12 m-2 ">
               <label className="w-50" htmlFor="description">
                 Number of images

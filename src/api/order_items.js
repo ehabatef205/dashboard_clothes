@@ -50,3 +50,8 @@ export const stat = async () => {
 export const update_many_items = async (ids,status) => {
     await axios.put(`${proxy}/`, {ids:ids,status:status})
 }
+
+
+export const filter = async (query) => {
+    return (await (await axios.post(`${proxy}/filter`, {query})).data)
+}

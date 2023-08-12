@@ -21,9 +21,16 @@ function App() {
   const [page, setPage] = useState('#')
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   useState(()=>{
-    const isauthed=auth()
-    if(isauthed){
-      setIsLoggedIn(isauthed)
+    try{
+    auth().then(e=>{
+      if(e.auth===true)
+      setIsLoggedIn(true)
+    else{
+      setIsLoggedIn(false)
+    }
+    })}
+    catch(err){
+      setIsLoggedIn(false)
     }
   },[])
 
