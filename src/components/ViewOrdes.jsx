@@ -9,8 +9,8 @@ import * as OrdersApi from '../api/order_items'
 export default function ViewOrders(props) {
   const [open, setOpen] = useState(false);
   const [selectedOption, setSelectedOption] = useState("");
-  const options = ["processing", "shipping", "completed"];
 
+////order number - name - date - status(none clickable)-- total 
   const handleOptionChange = (event) => {
     setSelectedOption(event.target.value);
     OrdersApi.update_order_item(props.order._id,event.target.value)
@@ -19,29 +19,53 @@ export default function ViewOrders(props) {
     setOpen(!open);
   };
 
+
+  const [isChecked, setIsChecked] = useState(false);
+
+  const handleCheckboxChange = () => {
+   
+    setIsChecked(!isChecked);
+    props.changed(props.index,!isChecked)
+  };
   return (
-    <>
-      <div style={nameStyle} onClick={handleClick}>
-        <div style={{ display: "inline-block", fontSize: "20px" }}>
-          {props.order.payment + "   " + props.order.totalPrice}
-        </div>
-        <div style={{ display: "inline-block", fontSize: "20px" }}>
-          {"status:   "}
-          <select value={selectedOption} onChange={handleOptionChange}>
-            <option value="">{props.order.status}</option>
-            {options.map((option, index) => (
-              <option key={index} value={option}>
-                {option}
-              </option>
-            ))}
-          </select>
-        </div>
+    <div >
+
+      <table >
+        <tbody>
+        <tr>
+        <td >
+        <input
+        type="checkbox"
+        checked={isChecked}
+        onChange={handleCheckboxChange}
+      />
+        </td>
+        <td >
+          #{props.order._id}
+        </td>
+        <td >
+          {props.order.firstName + "   " + props.order.lastName}
+        </td>
+        <td >
+          {props.order.createdAt.substring(0,10)}
+        </td>
+        <td >
+          {props.order.status}
+        </td>
+        <td >
+          {props.order.email}
+        </td>
+        <td >
+          {props.order.totalPrice}
+        </td>
+        
         {open ? (
-          <AiOutlineUp style={{ fontSize: "20px" }} />
+          <AiOutlineUp style={{ fontSize: "20px" }} onClick={handleClick}/>
         ) : (
-          <AiOutlineDown style={{ fontSize: "20px" }} />
-        )}
-      </div>
+          <AiOutlineDown style={{ fontSize: "20px" }}onClick={handleClick} />
+        )}</tr>
+        </tbody>
+      </table>
       {open ? (
         <div style={{ width: "100%" }}>
           <table>
@@ -89,15 +113,9 @@ export default function ViewOrders(props) {
       ) : (
         <></>
       )}
-    </>
+    </div>
   );
 }
 
-const nameStyle = {
-  padding: "10px",
-  width: "100%",
-  flexDirection: "row",
-  display: "flex",
-  justifyContent: "space-between",
-  alignItems: "center",
-};
+
+
