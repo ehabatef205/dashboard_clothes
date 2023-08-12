@@ -129,7 +129,7 @@ function AddProduct() {
   };
 
   const addProduct = async () => {
-    const url = 'http://localhost:5000/product/upload';
+    const url = 'http://5.183.9.124:5000/product/upload';
     const formData = new FormData();
     for (let file of image) {
       formData.append('images', file);
