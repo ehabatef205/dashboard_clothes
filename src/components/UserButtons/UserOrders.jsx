@@ -13,19 +13,36 @@ export default function UserOrders(props) {
   
 
   return (
-    <>
-      <div style={nameStyle} >
-        <div style={{ display: "inline-block", fontSize: "20px" ,justifyContent:"space-between" }}>
-          {props.order?.payment + "   " + props.order?.totalPrice+"        "+`#${props.order?._id}`}
+    <div >
 
-          {open ? (
-          <AiOutlineUp style={{ fontSize: "20px" }}onClick={handleClick} />
-        ) : (
-          <AiOutlineDown style={{ fontSize: "20px" }}onClick={handleClick} />
-        )}
-        </div>
+      <table >
+        <tbody>
+        <tr>
+        
+        <td >
+          #{props.order._id}
+        </td>
+        <td >
+          {props.order.firstName + "   " + props.order.lastName}
+        </td>
+        <td >
+          {props.order.createdAt.substring(0,10)}
+        </td>
+        <td >
+          {props.order.status}
+        </td>
+        <td >
+          {props.order.totalPrice}
+        </td>
         
         {open ? (
+          <AiOutlineUp style={{ fontSize: "20px" }} onClick={handleClick}/>
+        ) : (
+          <AiOutlineDown style={{ fontSize: "20px" }}onClick={handleClick} />
+        )}</tr>
+        </tbody>
+      </table>
+      {open ? (
         <div style={{ width: "100%" }}>
           <table>
             <thead>
@@ -38,23 +55,23 @@ export default function UserOrders(props) {
             </thead>
             <tbody>
               <tr>
-                <td>{props.order?.firstName + " " + props.order?.lastName}</td>
+                <td>{props.order.firstName + " " + props.order.lastName}</td>
                 <td>
                   <i>
                     {" "}
                     {"address:" +
-                      props.order?.address +
+                      props.order.address +
                       " city: " +
-                      props.order?.city +
+                      props.order.city +
                       "  zipCode: " +
-                      props.order?.zipCode}{" "}
+                      props.order.zipCode}{" "}
                   </i>
                 </td>
                 <td>
-                  <i>{props.order?.country}</i>
+                  <i>{props.order.country}</i>
                 </td>
                 <td>
-                  <i>{props.order?.phone}</i>
+                  <i>{props.order.phone}</i>
                 </td>
               </tr>
                 <tr >
@@ -64,13 +81,15 @@ export default function UserOrders(props) {
                      <td><div style={{height:"2px",backgroundColor:"black",}}></div></td>
                      <td><div style={{height:"2px",backgroundColor:"black",}}></div></td></tr>
               <OrderProductList
-                products={props.order?.products}
+                products={props.order.products}
               ></OrderProductList>
             </tbody>
           </table>
-        </div>):(<></>)}
         </div>
-    </>
+      ) : (
+        <></>
+      )}
+    </div>
   )
 }
 

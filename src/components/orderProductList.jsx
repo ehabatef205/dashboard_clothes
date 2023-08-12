@@ -14,6 +14,8 @@ export default function OrderProductList(props) {
                 <td>   <img style={{width:"200px"}}src={product.image}></img></td>
                 <td>count:{product.quantity}</td>
                 <td>SKU:{product.SKU}</td>
+                <td style={{color:product.color,backgroundColor:product.color}}>00</td>
+                <td>size:{product.size}</td>
             </tr>)
         )}
         </>)}

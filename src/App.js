@@ -15,11 +15,19 @@ import AddProductFromExcel from './components/AddProductFormExcel';
 import Orders from './components/orders';
 import Returns from './components/returns';
 import UserView from './components/users';
+import { auth } from './api/ADMIN';
 
 function App() {
   const [page, setPage] = useState('#')
-
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  useState(()=>{
+    const isauthed=auth()
+    if(isauthed){
+      setIsLoggedIn(isauthed)
+    }
+  },[])
+
+  
   const handleLogin = () => {
     setIsLoggedIn(true);
   };

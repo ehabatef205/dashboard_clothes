@@ -14,6 +14,12 @@ export const login = async ({email, password}) => {
     return axios.post(`${proxy}/login`,{email, password})
 }
 
+export const search = async (query) => {
+    const token = cookie.get('AuthAdmin')
+    return (await(await axios.post(`${proxy}/search`,{query:query}, {headers: { 'Authorization': token }})).data.response)
+}
+
+
 export const view_profile = async () => {
     const token = cookie.get('AuthAdmin')
     return (await axios.get(`${proxy}/view_profile`,{headers: { 'Authorization': token }})).data

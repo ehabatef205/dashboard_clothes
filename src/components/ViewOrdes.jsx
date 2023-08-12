@@ -9,7 +9,7 @@ import * as OrdersApi from '../api/order_items'
 export default function ViewOrders(props) {
   const [open, setOpen] = useState(false);
   const [selectedOption, setSelectedOption] = useState("");
-  const options = ["processing", "shipping", "completed","hold","cancelled"];
+
 ////order number - name - date - status(none clickable)-- total 
   const handleOptionChange = (event) => {
     setSelectedOption(event.target.value);
@@ -19,6 +19,14 @@ export default function ViewOrders(props) {
     setOpen(!open);
   };
 
+
+  const [isChecked, setIsChecked] = useState(false);
+
+  const handleCheckboxChange = () => {
+   
+    setIsChecked(!isChecked);
+    props.changed(props.index,!isChecked)
+  };
   return (
     <div >
 
@@ -26,7 +34,11 @@ export default function ViewOrders(props) {
         <tbody>
         <tr>
         <td >
-        <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault"/>
+        <input
+        type="checkbox"
+        checked={isChecked}
+        onChange={handleCheckboxChange}
+      />
         </td>
         <td >
           #{props.order._id}
@@ -102,29 +114,5 @@ export default function ViewOrders(props) {
   );
 }
 
-const nameStyle = {
-  padding: "10px",
-  width: "100%",
-  flexDirection: "row",
-  display: "flex",
-  justifyContent: "space-between",
-  alignItems: "center",
-};
-const heads={ display: "inline-block", fontSize: "20px" }
-
-/*
 
 
-<div style={{ display: "inline-block", fontSize: "20px" }}>
-          {"status:   "}
-          <select value={selectedOption} onChange={handleOptionChange}>
-            <option value="">{props.order.status}</option>
-            {options.map((option, index) => (
-              <option key={index} value={option}>
-                {option}
-              </option>
-            ))}
-          </select>
-        </div>
-
-*/

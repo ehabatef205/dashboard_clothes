@@ -16,6 +16,17 @@ export default function ViewSubCategoryUpdate(props) {
     const [images, setImages] = useState(props.product.imageSrc);
     const [selectedValue, setSelectedValue] = useState(props.product.imageSrc.length);
 
+    
+    const updateSizeQuantity = (size, index, newValue) => {
+
+    
+        setSizeQuantities((prevQuantities) => {
+          const updatedQuantities = { ...prevQuantities };
+          updatedQuantities[size][index] = newValue;
+          return updatedQuantities;
+        });
+      };
+
     const typeOfProductValues = ["Hot sale", "Ai recom", "Super deals", "Viewed products", "First visit products", ""];
     const [selectedTypeValue, setSelectedTypeValue] = useState(props.product.typeOfProduct);
 
@@ -39,20 +50,16 @@ export default function ViewSubCategoryUpdate(props) {
     const [formData, setFormData] = useState({
         supplier_id: props.product.supplier_id,
         name: props.product.name,
-        quantity: props.product.quantity,
         SKU: props.product.SKU,
         price_before: props.product.price_before,
         price_after: props.product.price_after,
-        color: props.product.desc.color,
+        colors: props.product.colors,
         type: props.product.desc.type,
         nameOfBrand: props.product.desc.brand.name,
         description: props.product.desc.description,
-        s: props.product.sizes.s,
-        m: props.product.sizes.m,
-        l: props.product.sizes.l,
-        xl: props.product.sizes.xl,
-        xxl: props.product.sizes.xxl
+       sizes:props.product.sizes
     });
+    const [sizeQuantities, setSizeQuantities] = useState(formData.sizes);
 
     const updateProduct = async () => {
         await product.update_product(
@@ -64,16 +71,12 @@ export default function ViewSubCategoryUpdate(props) {
             formData.price_before,
             formData.price_after,
             images.slice(0, selectedValue),
-            formData.color,
+            formData.colors,
             formData.type,
             formData.nameOfBrand,
             brandLogo,
             formData.description,
-            formData.s,
-            formData.m,
-            formData.l,
-            formData.xl,
-            formData.xxl
+            formData.sizes
         ).then(e => {
             window.location.reload(false);
         })
@@ -88,22 +91,7 @@ export default function ViewSubCategoryUpdate(props) {
                 {open ? <AiOutlineUp style={{ fontSize: "20px" }} /> : <AiOutlineDown style={{ fontSize: "20px" }} />}
             </div>
             {open ? <div style={{ width: "100%" }}>
-                <div className="col-12 m-2 ">
-                    <label className="w-50" htmlFor="description">
-                        Type of product
-                    </label>
-                    <select
-                        value={selectedTypeValue}
-                        style={{ width: "50%" }}
-                        onChange={handleSelectType}
-                    >
-                        {typeOfProductValues.map((typeOfProduct, index) => (
-                            <option key={index} value={typeOfProduct} >
-                                {typeOfProduct}
-                            </option>
-                        ))}
-                    </select>
-                </div>
+                
                 <div className="col-12 m-2 ">
                     <label className="w-50" htmlFor="name">
                         Name
@@ -124,26 +112,7 @@ export default function ViewSubCategoryUpdate(props) {
                         required
                     />
                 </div>
-                <div className="col-12 m-2 ">
-                    <label className="w-50" htmlFor="quantity">
-                        Quantity
-                    </label>
-                    <input
-                        style={{ border: "1px solid gray" }} className="w-50 btn"
-                        type="number"
-                        name="quantity"
-                        value={formData?.quantity}
-                        id="quantity"
-                        placeholder="Enter Quantity"
-                        onChange={(e) =>
-                            setFormData({
-                                ...formData,
-                                quantity: e.target.value,
-                            })
-                        }
-                        required
-                    />
-                </div>
+                
 
                 <div className="col-12 m-2 ">
                     <label className="w-50" htmlFor="SKU">
@@ -309,109 +278,90 @@ export default function ViewSubCategoryUpdate(props) {
                         required
                     />
                 </div>
-                <label className="w-50" htmlFor="sizes">
-                    Sizes
-                </label>
-                <div className="col-12 m-2 ">
-                    <label className="w-50" htmlFor="sizes">
-                        Quantity of s
-                    </label>
-                    <input style={{ border: "1px solid gray" }}
-                        className="w-50 btn"
-                        type="number"
-                        name="Quantity of s"
-                        value={formData?.s}
-                        id="Quantity of s"
-                        placeholder="Enter Quantity of s"
-                        onChange={(e) =>
-                            setFormData({
-                                ...formData,
-                                s: e.target.value,
-                            })
-                        }
-                        required
-                    />
-                </div>
-                <div className="col-12 m-2 ">
-                    <label className="w-50" htmlFor="sizes">
-                        Quantity of m
-                    </label>
-                    <input style={{ border: "1px solid gray" }}
-                        className="w-50 btn"
-                        type="number"
-                        name="Quantity of m"
-                        value={formData?.m}
-                        id="Quantity of m"
-                        placeholder="Enter Quantity of m"
-                        onChange={(e) =>
-                            setFormData({
-                                ...formData,
-                                m: e.target.value,
-                            })
-                        }
-                        required
-                    />
-                </div>
-                <div className="col-12 m-2 ">
-                    <label className="w-50" htmlFor="sizes">
-                        Quantity of l
-                    </label>
-                    <input style={{ border: "1px solid gray" }}
-                        className="w-50 btn"
-                        type="number"
-                        name="Quantity of l"
-                        value={formData?.l}
-                        id="Quantity of l"
-                        placeholder="Enter Quantity of l"
-                        onChange={(e) =>
-                            setFormData({
-                                ...formData,
-                                l: e.target.value,
-                            })
-                        }
-                        required
-                    />
-                </div>
-                <div className="col-12 m-2 ">
-                    <label className="w-50" htmlFor="sizes">
-                        Quantity of xl
-                    </label>
-                    <input style={{ border: "1px solid gray" }}
-                        className="w-50 btn"
-                        type="number"
-                        name="Quantity of xl"
-                        value={formData?.xl}
-                        id="Quantity of xl"
-                        placeholder="Enter Quantity of xl"
-                        onChange={(e) =>
-                            setFormData({
-                                ...formData,
-                                xl: e.target.value,
-                            })
-                        }
-                        required
-                    />
-                </div>
-                <div className="col-12 m-2 ">
-                    <label className="w-50" htmlFor="sizes">
-                        Quantity of xxl
-                    </label>
-                    <input style={{ border: "1px solid gray" }}
-                        className="w-50 btn"
-                        type="number"
-                        name="Quantity of xxl"
-                        value={formData?.xxl}
-                        id="Quantity of xxl"
-                        placeholder="Enter Quantity of xxl"
-                        onChange={(e) =>
-                            setFormData({
-                                ...formData,
-                                xxl: e.target.value,
-                            })
-                        }
-                        required
-                    />
-                </div>
+                <div style={{display:"flex",flexDirection:"row",width:"100%" }}>
+  <div style={{width:"50%"}}>
+  <label >
+    Colors
+  </label></div>
+
+  <div style={{ border: "1px solid gray",display:"flex",flexDirection:"row",justifyContent:"space-between",width:"50%" }} 
+  >{formData.colors?.map((color,index)=>(
+    <button  style={{color:color,backgroundColor:color,borderRadius:"20px",width:`${100/formData.colors.length}%`}}> 0</button>
+  ))}</div>
+</div>
+<label className="w-50" htmlFor="sizes">
+  Sizes
+</label>
+<div style={{display:"flex",flexDirection:"row",width:"100%" }}>
+  <label className="w-50" htmlFor="sizes">
+    Quantity of s
+  </label>
+  <div style={{ border: "1px solid gray",display:"flex",flexDirection:"row",justifyContent:"space-between",width:"50%" }} 
+  >{formData.colors.map((color,index)=>(
+    <input  key={index}
+    type="number"
+    value={sizeQuantities.S[index]}
+    style={{  borderRadius: "5px", width: `${100 / formData.colors.length}%` }}
+    onChange={(e) => updateSizeQuantity("S", index, e.target.value)}
+    />
+  ))}</div>
+</div>
+<div style={{display:"flex",flexDirection:"row",width:"100%" }}>
+  <label className="w-50" htmlFor="sizes">
+    Quantity of m
+  </label>
+  <div style={{ border: "1px solid gray",display:"flex",flexDirection:"row",justifyContent:"space-between",width:"50%" }} 
+  >{formData.colors.map((color,index)=>(
+    <input  key={index}
+    type="number"
+    value={sizeQuantities.M[index]}
+    style={{  borderRadius: "5px", width: `${100 / formData.colors.length}%` }}
+    onChange={(e) => updateSizeQuantity("M", index, e.target.value)}
+    />
+  ))}</div>
+</div>
+<div style={{display:"flex",flexDirection:"row",width:"100%" }}>
+  <label className="w-50" htmlFor="sizes">
+    Quantity of l
+  </label>
+  <div style={{ border: "1px solid gray",display:"flex",flexDirection:"row",justifyContent:"space-between",width:"50%" }} 
+  >{formData.colors.map((color,index)=>(
+    <input  key={index}
+    type="number"
+    value={sizeQuantities.L[index]}
+    style={{  borderRadius: "5px", width: `${100 / formData.colors.length}%` }}
+    onChange={(e) => updateSizeQuantity("L", index, e.target.value)}
+    />
+  ))}</div>
+</div>
+<div style={{display:"flex",flexDirection:"row",width:"100%" }}>
+  <label className="w-50" htmlFor="sizes">
+    Quantity of xl
+  </label>
+  <div style={{ border: "1px solid gray",display:"flex",flexDirection:"row",justifyContent:"space-between",width:"50%" }} 
+  >{formData.colors.map((color,index)=>(
+    <input key={index} 
+    type="number"
+    value={sizeQuantities.XL[index]}
+    style={{  borderRadius: "5px", width: `${100 / formData.colors.length}%` }}
+    onChange={(e) => updateSizeQuantity("XL", index, e.target.value)}
+    />
+  ))}</div>
+</div>
+<div style={{display:"flex",flexDirection:"row",width:"100%" }}>
+  <label className="w-50" htmlFor="sizes">
+    Quantity of xxl
+  </label>
+  <div style={{ border: "1px solid gray",display:"flex",flexDirection:"row",justifyContent:"space-between",width:"50%" }} 
+  >{formData.colors.map((color,index)=>(
+    <input  key={index}
+    type="number"
+    value={sizeQuantities.XXL[index]}
+    style={{  borderRadius: "5px", width: `${100 / formData.colors.length}%` }}
+    onChange={(e) => updateSizeQuantity("XXL", index, e.target.value)}
+    />
+  ))}</div>
+</div>
                 <div className="col-12 m-2 ">
                     <label className="w-50" htmlFor="description">
                         Number of images

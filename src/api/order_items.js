@@ -46,3 +46,7 @@ export const stat = async () => {
     const token = cookie.get('AuthAdmin')
     return (await (await axios.get(`${proxy}/stat`,{headers: { 'Authorization': token }})).data)
 }
+
+export const update_many_items = async (ids,status) => {
+    await axios.put(`${proxy}/`, {ids:ids,status:status})
+}
