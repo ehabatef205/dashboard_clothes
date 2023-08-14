@@ -178,13 +178,13 @@ function AddProduct() {
     formData.append("nameOfBrand", formData1.nameOfBrand);
     formData.append("description", JSON.stringify(formData1.description));
     formData.append("clothing", clothing === "true");
-    if (clothing === "true") {
+   /* if (clothing === "true") {
       formData.append("gender", gender);
       formData.append("vrpos", vrpos);
       if (vrpos === "bottoms") {
         formData.append("vrpossec", sec);
       }
-    }
+    }*/
     formData.append("colors", JSON.stringify(Colors));
     formData.append("sizes", JSON.stringify(sizeQuantities));
 
@@ -477,6 +477,7 @@ function AddProduct() {
           style={{ borderBottom: "1px solid gray", textAlign: "center" }}
         >
           <h1>Add Product</h1>
+          <h3 className="text-danger">{sucessview}</h3>
         </div>
         <div className=" col-12 h-75 my-5 ">
           <div className="d-flex flex-wrap ">
