@@ -53,7 +53,9 @@ function Orders() {
     const selectedIDs = OrderList.filter((_, index) => check[index]).map(
       (obj) => obj._id
     );
-    OrdersApi.update_many_items(selectedIDs, selectedOption);
+    OrdersApi.update_many_items(selectedIDs, selectedOption).then(e=>{
+      filter();
+    });
   };
   const filter=async ()=>{
     var query={}
@@ -121,6 +123,9 @@ function Orders() {
           <div style={{backgroundColor:statusfilter===""?"transparent":"red"}}>
             status :
             <select value={statusfilter}  onChange={handleStatusChange}>
+            <option value={""}>
+                none
+              </option>
               {options.map((option, index) => (
                 <option key={index} value={option}>
                   {option}
@@ -132,7 +137,9 @@ function Orders() {
           <div style={{backgroundColor:monthFilter===""?"transparent":"red"}}>
             date :
             <select value={monthFilter} onChange={handleMonthchange}>
-              
+            <option value={""}>
+                none
+              </option>
               {monthsArray.map((option, index) => (
                 <option key={index} value={option}>
                   {option}

@@ -1,34 +1,47 @@
 import React, { useState, useEffect } from "react";
 import { SketchPicker } from "react-color";
 import "./add_products.css";
-import * as main_category from '../api/product_category'
-import * as sub_category from '../api/subcategory'
+import * as main_category from "../api/product_category";
+import * as sub_category from "../api/subcategory";
 
 import axios from "axios";
 
-
 function AddProduct() {
-  const [creatingnew, setcreatingnew] = useState(false)
-  const addcoloraction=()=>{
-    setcreatingnew(!creatingnew)
-    console.log(creatingnew)
-  }
-  const options=[true, false]
+  const [clothing, setclothing] = useState(false);
+  const [creatingnew, setcreatingnew] = useState(false);
+  const addcoloraction = () => {
+    setcreatingnew(!creatingnew);
+    console.log(creatingnew);
+  };
+  const [sucessview, setsucessview] = useState("");
+  const options = [true, false];
   const handleOptionChange = (event) => {
-    console.log(event.target.value)
     setclothing(event.target.value);
-
-};
+    console.log(clothing);
+  };
   const [colorhex, setcolorhex] = useState("");
 
   const integerValues = [1, 2, 3, 4, 5];
   const [images, setImages] = useState(Array(5).fill(""));
-  const [image, setImage] = useState([])
+  const [image, setImage] = useState([]);
   const [selectedValue, setSelectedValue] = useState(1);
 
-  const [categories, setCategories] = useState([])
+  const [categories, setCategories] = useState([]);
   const [selectedCategoryValue, setSelectedCategoryValue] = useState("");
-  const  [Colors, setColors] = useState(["red","blue","orange","black","white","green"])
+  const [Colors, setColors] = useState([
+    "red",
+    "blue",
+    "orange",
+    "black",
+    "white",
+    "green",
+  ]);
+  const [gender, setgender] = useState("");
+  const genderarr = ["female", "male"];
+  const vrposarr = ["tops", "bottoms", "outerwear", "allbody"];
+  const vrpossecarr = ["pants", "shorts", "skirts"];
+  const [vrpos, setVRPOS] = useState("");
+  const [sec, setVRPOSsec] = useState("");
   const [sizeQuantities, setSizeQuantities] = useState({
     S: [0, 0, 0, 0, 0, 0],
     M: [0, 0, 0, 0, 0, 0],
@@ -36,44 +49,67 @@ function AddProduct() {
     XL: [0, 0, 0, 0, 0, 0],
     XXL: [0, 0, 0, 0, 0, 0],
   });
+  const sentsuccess = () => {
+    setSelectedValue(1);
+    setColors(["red", "blue", "orange", "black", "white", "green"]);
+    setSizeQuantities({
+      S: [0, 0, 0, 0, 0, 0],
+      M: [0, 0, 0, 0, 0, 0],
+      L: [0, 0, 0, 0, 0, 0],
+      XL: [0, 0, 0, 0, 0, 0],
+      XXL: [0, 0, 0, 0, 0, 0],
+    });
 
-  const addcolor=()=>{
-    console.log(colorhex)
-    if(colorhex.length===6)
-    {
-    var  initialColors = [...Colors];
-     initialColors.push(`#${colorhex}`)
-     console.log(initialColors)
-    const initialSizeQuantities = {
-      S: Array(initialColors.length).fill(0),
-      M: Array(initialColors.length).fill(0),
-      L: Array(initialColors.length).fill(0),
-      XL: Array(initialColors.length).fill(0),
-      XXL: Array(initialColors.length).fill(0),
-    };
-    setColors(initialColors)
-    setSizeQuantities(initialSizeQuantities)
-    setcreatingnew(false)}
-  }
-  const  [clength, setclength] = useState(6)
-  const [subCategories, setSubCategories] = useState([])
-  const [clothing, setclothing] = useState(false)
+    setFormData({
+      supplier_id: "",
+      name: "",
+      quantity: 0,
+      SKU: "",
+      price_before: 0,
+      price_after: 0,
+      type: "",
+      nameOfBrand: "",
+      description: "",
+    });
+    setImages(Array(5).fill(""));
+    window.scrollTo(0, 0);
+  };
+
+  const addcolor = () => {
+    console.log(colorhex);
+    if (colorhex.length === 6) {
+      var initialColors = [...Colors];
+      initialColors.push(`#${colorhex}`);
+      console.log(initialColors);
+      const initialSizeQuantities = {
+        S: Array(initialColors.length).fill(0),
+        M: Array(initialColors.length).fill(0),
+        L: Array(initialColors.length).fill(0),
+        XL: Array(initialColors.length).fill(0),
+        XXL: Array(initialColors.length).fill(0),
+      };
+      setColors(initialColors);
+      setSizeQuantities(initialSizeQuantities);
+      setcreatingnew(false);
+    }
+  };
+  const [clength, setclength] = useState(6);
+  const [subCategories, setSubCategories] = useState([]);
+
   const [selectedSubCategoryValue, setSelectedSubCategoryValue] = useState("");
 
-
-  const [brandLogo, setBrandLogo] = useState("")
+  const [brandLogo, setBrandLogo] = useState("");
 
   const [formData1, setFormData] = useState({
     supplier_id: "",
     name: "",
-    quantity:0,
+    quantity: 0,
     SKU: "",
     price_before: 0,
     price_after: 0,
     type: "",
     nameOfBrand: "",
     description: "",
-
   });
 
   const handleSelectChange = (event) => {
@@ -83,44 +119,39 @@ function AddProduct() {
 
   const handleSelectCategory = (event) => {
     setSelectedCategoryValue(event.target.value);
-    getSubCategory(event.target.value)
+    getSubCategory(event.target.value);
   };
 
   const handleSelectSuCategory = (event) => {
     setSelectedSubCategoryValue(event.target.value);
   };
 
-
-
   useEffect(() => {
     const getCategory = async () => {
-      await main_category.all_product_category().then(e => {
-        setCategories(e.response)
-        setSelectedCategoryValue(e.response[0]._id)
-        getSubCategory(e.response[0]._id)
-      })
-    }
-    getCategory()
-  }, [])
+      await main_category.all_product_category().then((e) => {
+        setCategories(e.response);
+        setSelectedCategoryValue(e.response[0]._id);
+        getSubCategory(e.response[0]._id);
+      });
+    };
+    getCategory();
+  }, []);
   useEffect(() => {
-    setclength(Colors.length)
-  }, [Colors])
+    setclength(Colors.length);
+  }, [Colors]);
 
   const getSubCategory = async (id) => {
-    await sub_category.all_sub_category(id).then(e => {
-      setSubCategories(e.response)
+    await sub_category.all_sub_category(id).then((e) => {
+      setSubCategories(e.response);
       if (e.response.length !== 0) {
-        setSelectedSubCategoryValue(e.response[0]._id)
+        setSelectedSubCategoryValue(e.response[0]._id);
       } else {
-        setSelectedSubCategoryValue("")
+        setSelectedSubCategoryValue("");
       }
-    })
-  }
-
+    });
+  };
 
   const updateSizeQuantity = (size, index, newValue) => {
-
-    
     setSizeQuantities((prevQuantities) => {
       const updatedQuantities = { ...prevQuantities };
       updatedQuantities[size][index] = newValue;
@@ -129,144 +160,326 @@ function AddProduct() {
   };
 
   const addProduct = async () => {
-    const url = 'http://5.183.9.124:5000/product/upload';
+    const url = "http://5.183.9.124:5000/product/upload";
     const formData = new FormData();
     for (let file of image) {
-      formData.append('images', file);
+      formData.append("images", file);
     }
-    formData.append('category_id', selectedCategoryValue);
-    formData.append('subCategory', selectedSubCategoryValue);
-    formData.append('typeOfProduct', '');
-    formData.append('name', formData1.name);
+    formData.append("category_id", selectedCategoryValue);
+    formData.append("subCategory", selectedSubCategoryValue);
+    formData.append("typeOfProduct", "");
+    formData.append("name", formData1.name);
 
-    formData.append('SKU', formData1.SKU);
-    formData.append('price_before', formData1.price_before);
-    formData.append('price_after', formData1.price_after);
-    formData.append('quantity', formData1.quantity);
-    formData.append('type', formData1.type)
-    formData.append('nameOfBrand', formData1.nameOfBrand)
-    formData.append('description',JSON.stringify( formData1.description))
-    formData.append('clothing', clothing)
-    formData.append('colors', JSON.stringify(Colors))
-    formData.append('sizes', JSON.stringify(sizeQuantities))
+    formData.append("SKU", formData1.SKU);
+    formData.append("price_before", formData1.price_before);
+    formData.append("price_after", formData1.price_after);
+    formData.append("quantity", formData1.quantity);
+    formData.append("type", formData1.type);
+    formData.append("nameOfBrand", formData1.nameOfBrand);
+    formData.append("description", JSON.stringify(formData1.description));
+    formData.append("clothing", clothing === "true");
+    if (clothing === "true") {
+      formData.append("gender", gender);
+      formData.append("vrpos", vrpos);
+      if (vrpos === "bottoms") {
+        formData.append("vrpossec", sec);
+      }
+    }
+    formData.append("colors", JSON.stringify(Colors));
+    formData.append("sizes", JSON.stringify(sizeQuantities));
 
     const config = {
       headers: {
-        'content-type': 'multipart/form-data',
+        "content-type": "multipart/form-data",
       },
     };
     axios.post(url, formData, config).then((response) => {
-      console.log(response)
+      if(response.data.response.name){
+        if(response.data.response.garment_id){
+          setsucessview("product added with dressing room option")
+        }
+        else{
+          setsucessview("product added successfully")
+        }
+
+      sentsuccess();
+    }
+    else{
+      setsucessview("Operation failed , some error occurred")
+    }
     });
-  }
+  };
 
   function handleChange(event) {
-    setImage([...image, event.target.files[0]])
+    setImage([...image, event.target.files[0]]);
   }
-  const Clothingtrue=()=>{if(clothing)return(<><div style={{display:"flex",flexDirection:"row",width:"100%" }}>
-  <div style={{width:"50%"}}>
-  <label >
-    Colors
-  </label>
-  <button disabled={!clothing} onClick={addcoloraction}>start adding more </button>
+  const Clothingtrue = () => {
+    if (clothing)
+      return (
+        <>
+          <div style={{ display: "flex", flexDirection: "row", width: "100%" }}>
+            <div style={{ width: "50%" }}>
+              <label>Colors</label>
+              <button disabled={!clothing} onClick={addcoloraction}>
+                start adding more{" "}
+              </button>
 
-  {creatingnew?(<div>
-    <input type="text" value={colorhex}style={{width:"100%"}} onChange={(e)=>{setcolorhex(e.target.value)}} placeholder="copy color hex here"></input>
-    <button disabled={!clothing} onClick={addcolor}>+ add  </button>
-    <Picker></Picker>
-    
-  </div>):<></>}</div>
-  <div style={{ border: "1px solid gray",display:"flex",flexDirection:"row",justifyContent:"space-between",width:"50%" }} 
-  >{Colors.map((color,index)=>(
-    <button disabled={!clothing} style={{color:color,backgroundColor:color,borderRadius:"20px",width:`${100/clength}%`}}> 0</button>
-  ))}</div>
-</div>
+              {creatingnew ? (
+                <div>
+                  <input
+                    type="text"
+                    value={colorhex}
+                    style={{ width: "100%" }}
+                    onChange={(e) => {
+                      setcolorhex(e.target.value);
+                    }}
+                    placeholder="copy color hex here"
+                  ></input>
+                  <button disabled={!clothing} onClick={addcolor}>
+                    + add{" "}
+                  </button>
+                  <Picker></Picker>
+                </div>
+              ) : (
+                <></>
+              )}
+            </div>
+            <div
+              style={{
+                border: "1px solid gray",
+                display: "flex",
+                flexDirection: "row",
+                justifyContent: "space-between",
+                width: "50%",
+              }}
+            >
+              {Colors.map((color, index) => (
+                <button
+                  disabled={!clothing}
+                  style={{
+                    color: color,
+                    backgroundColor: color,
+                    borderRadius: "20px",
+                    width: `${100 / clength}%`,
+                  }}
+                >
+                  {" "}
+                  0
+                </button>
+              ))}
+            </div>
+          </div>
 
-<label className="w-50" htmlFor="sizes">
-  Sizes
-</label>
-<div style={{display:"flex",flexDirection:"row",width:"100%" }}>
-  <label className="w-50" htmlFor="sizes">
-    Quantity of s
-  </label>
-  <div style={{ border: "1px solid gray",display:"flex",flexDirection:"row",justifyContent:"space-between",width:"50%" }} 
-  >{Colors.map((color,index)=>(
-    <input  key={index} disabled={!clothing}
-    type="number"
-    value={sizeQuantities.S[index]}
-    style={{  borderRadius: "5px", width: `${100 / clength}%` }}
-    onChange={(e) => updateSizeQuantity("S", index, e.target.value)}
-    />
-  ))}</div>
-</div>
-<div style={{display:"flex",flexDirection:"row",width:"100%" }}>
-  <label className="w-50" htmlFor="sizes">
-    Quantity of m
-  </label>
-  <div style={{ border: "1px solid gray",display:"flex",flexDirection:"row",justifyContent:"space-between",width:"50%" }} 
-  >{Colors.map((color,index)=>(
-    <input  key={index} disabled={!clothing}
-    type="number"
-    value={sizeQuantities.M[index]}
-    style={{  borderRadius: "5px", width: `${100 / clength}%` }}
-    onChange={(e) => updateSizeQuantity("M", index, e.target.value)}
-    />
-  ))}</div>
-</div>
-<div style={{display:"flex",flexDirection:"row",width:"100%" }}>
-  <label className="w-50" htmlFor="sizes">
-    Quantity of l
-  </label>
-  <div style={{ border: "1px solid gray",display:"flex",flexDirection:"row",justifyContent:"space-between",width:"50%" }} 
-  >{Colors.map((color,index)=>(
-    <input  key={index} disabled={!clothing}
-    type="number"
-    value={sizeQuantities.L[index]}
-    style={{  borderRadius: "5px", width: `${100 / clength}%` }}
-    onChange={(e) => updateSizeQuantity("L", index, e.target.value)}
-    />
-  ))}</div>
-</div>
-<div style={{display:"flex",flexDirection:"row",width:"100%" }}>
-  <label className="w-50" htmlFor="sizes">
-    Quantity of xl
-  </label>
-  <div style={{ border: "1px solid gray",display:"flex",flexDirection:"row",justifyContent:"space-between",width:"50%" }} 
-  >{Colors.map((color,index)=>(
-    <input key={index}  disabled={!clothing}
-    type="number"
-    value={sizeQuantities.XL[index]}
-    style={{  borderRadius: "5px", width: `${100 / clength}%` }}
-    onChange={(e) => updateSizeQuantity("XL", index, e.target.value)}
-    />
-  ))}</div>
-</div>
-<div style={{display:"flex",flexDirection:"row",width:"100%" }}>
-  <label className="w-50" htmlFor="sizes">
-    Quantity of xxl
-  </label>
-  <div style={{ border: "1px solid gray",display:"flex",flexDirection:"row",justifyContent:"space-between",width:"50%" }} 
-  >{Colors.map((color,index)=>(
-    <input  key={index} disabled={!clothing}
-    type="number"
-    value={sizeQuantities.XXL[index]}
-    style={{  borderRadius: "5px", width: `${100 / clength}%` }}
-    onChange={(e) => updateSizeQuantity("XXL", index, e.target.value)}
-    />
-  ))}</div>
-</div></>)
-else{return<></>}
-}
+          <label className="w-50" htmlFor="sizes">
+            Sizes
+          </label>
+          <div style={{ display: "flex", flexDirection: "row", width: "100%" }}>
+            <label className="w-50" htmlFor="sizes">
+              Quantity of s
+            </label>
+            <div
+              style={{
+                border: "1px solid gray",
+                display: "flex",
+                flexDirection: "row",
+                justifyContent: "space-between",
+                width: "50%",
+              }}
+            >
+              {Colors.map((color, index) => (
+                <input
+                  key={index}
+                  disabled={!clothing}
+                  type="number"
+                  value={sizeQuantities.S[index]}
+                  style={{ borderRadius: "5px", width: `${100 / clength}%` }}
+                  onChange={(e) =>
+                    updateSizeQuantity("S", index, e.target.value)
+                  }
+                />
+              ))}
+            </div>
+          </div>
+          <div style={{ display: "flex", flexDirection: "row", width: "100%" }}>
+            <label className="w-50" htmlFor="sizes">
+              Quantity of m
+            </label>
+            <div
+              style={{
+                border: "1px solid gray",
+                display: "flex",
+                flexDirection: "row",
+                justifyContent: "space-between",
+                width: "50%",
+              }}
+            >
+              {Colors.map((color, index) => (
+                <input
+                  key={index}
+                  disabled={!clothing}
+                  type="number"
+                  value={sizeQuantities.M[index]}
+                  style={{ borderRadius: "5px", width: `${100 / clength}%` }}
+                  onChange={(e) =>
+                    updateSizeQuantity("M", index, e.target.value)
+                  }
+                />
+              ))}
+            </div>
+          </div>
+          <div style={{ display: "flex", flexDirection: "row", width: "100%" }}>
+            <label className="w-50" htmlFor="sizes">
+              Quantity of l
+            </label>
+            <div
+              style={{
+                border: "1px solid gray",
+                display: "flex",
+                flexDirection: "row",
+                justifyContent: "space-between",
+                width: "50%",
+              }}
+            >
+              {Colors.map((color, index) => (
+                <input
+                  key={index}
+                  disabled={!clothing}
+                  type="number"
+                  value={sizeQuantities.L[index]}
+                  style={{ borderRadius: "5px", width: `${100 / clength}%` }}
+                  onChange={(e) =>
+                    updateSizeQuantity("L", index, e.target.value)
+                  }
+                />
+              ))}
+            </div>
+          </div>
+          <div style={{ display: "flex", flexDirection: "row", width: "100%" }}>
+            <label className="w-50" htmlFor="sizes">
+              Quantity of xl
+            </label>
+            <div
+              style={{
+                border: "1px solid gray",
+                display: "flex",
+                flexDirection: "row",
+                justifyContent: "space-between",
+                width: "50%",
+              }}
+            >
+              {Colors.map((color, index) => (
+                <input
+                  key={index}
+                  disabled={!clothing}
+                  type="number"
+                  value={sizeQuantities.XL[index]}
+                  style={{ borderRadius: "5px", width: `${100 / clength}%` }}
+                  onChange={(e) =>
+                    updateSizeQuantity("XL", index, e.target.value)
+                  }
+                />
+              ))}
+            </div>
+          </div>
+          <div style={{ display: "flex", flexDirection: "row", width: "100%" }}>
+            <label className="w-50" htmlFor="sizes">
+              Quantity of xxl
+            </label>
+            <div
+              style={{
+                border: "1px solid gray",
+                display: "flex",
+                flexDirection: "row",
+                justifyContent: "space-between",
+                width: "50%",
+              }}
+            >
+              {Colors.map((color, index) => (
+                <input
+                  key={index}
+                  disabled={!clothing}
+                  type="number"
+                  value={sizeQuantities.XXL[index]}
+                  style={{ borderRadius: "5px", width: `${100 / clength}%` }}
+                  onChange={(e) =>
+                    updateSizeQuantity("XXL", index, e.target.value)
+                  }
+                />
+              ))}
+            </div>
+          </div>
+          <div style={{ display: "flex", flexDirection: "row", width: "100%" }}>
+            <label className="w-50" htmlFor="sizes">
+              gender
+            </label>
+            <select
+              style={{ width: "50%" }}
+              value={gender}
+              onChange={(e) => setgender(e.target.value)}
+            >
+              {genderarr.map((option, index) => (
+                <option key={index} value={option}>
+                  {String(option)}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          <div style={{ display: "flex", flexDirection: "row", width: "100%" }}>
+            <label className="w-50" htmlFor="sizes">
+              VR position
+            </label>
+            <select
+              style={{ width: "50%" }}
+              value={vrpos}
+              onChange={(e) => setVRPOS(e.target.value)}
+            >
+              {vrposarr.map((option, index) => (
+                <option key={index} value={option}>
+                  {String(option)}
+                </option>
+              ))}
+            </select>
+          </div>
+          {vrpos === "bottoms" ? (
+            <div
+              style={{ display: "flex", flexDirection: "row", width: "100%" }}
+            >
+              <label className="w-50" htmlFor="sizes">
+                VR possition bottom
+              </label>
+              <select
+                style={{ width: "50%" }}
+                value={sec}
+                onChange={(e) => setVRPOSsec(e.target.value)}
+              >
+                {vrpossecarr.map((option, index) => (
+                  <option key={index} value={option}>
+                    {String(option)}
+                  </option>
+                ))}
+              </select>
+            </div>
+          ) : (
+            <></>
+          )}
+        </>
+      );
+    else {
+      return <></>;
+    }
+  };
   return (
     <div>
       <div className="add   ">
-        <div className="w-100  addheder col-12" style={{ borderBottom: "1px solid gray", textAlign: "center" }} >
+        <div
+          className="w-100  addheder col-12"
+          style={{ borderBottom: "1px solid gray", textAlign: "center" }}
+        >
           <h1>Add Product</h1>
         </div>
         <div className=" col-12 h-75 my-5 ">
-          <div
-            className="d-flex flex-wrap "
-          >
+          <div className="d-flex flex-wrap ">
             <div className="col-12 m-2 ">
               <label className="w-50" htmlFor="description">
                 Category
@@ -277,7 +490,7 @@ else{return<></>}
                 onChange={handleSelectCategory}
               >
                 {categories.map((category) => (
-                  <option key={category._id} value={category._id} >
+                  <option key={category._id} value={category._id}>
                     {category.name}
                   </option>
                 ))}
@@ -293,18 +506,19 @@ else{return<></>}
                 onChange={handleSelectSuCategory}
               >
                 {subCategories.map((subCategory) => (
-                  <option key={subCategory._id} value={subCategory._id} >
+                  <option key={subCategory._id} value={subCategory._id}>
                     {subCategory.name}
                   </option>
                 ))}
               </select>
             </div>
-            
+
             <div className="col-12 m-2 ">
               <label className="w-50" htmlFor="name">
                 Name
               </label>
-              <input style={{ border: "1px solid gray" }}
+              <input
+                style={{ border: "1px solid gray" }}
                 className="w-50 btn"
                 type="text"
                 name="name"
@@ -320,13 +534,13 @@ else{return<></>}
                 required
               />
             </div>
-            
 
             <div className="col-12 m-2 ">
               <label className="w-50" htmlFor="SKU">
                 SKU
               </label>
-              <input style={{ border: "1px solid gray" }}
+              <input
+                style={{ border: "1px solid gray" }}
                 className="w-50 btn"
                 type="text"
                 value={formData1?.SKU}
@@ -347,7 +561,8 @@ else{return<></>}
               <label className="w-50" htmlFor="priceBefore">
                 Price Before
               </label>
-              <input style={{ border: "1px solid gray" }}
+              <input
+                style={{ border: "1px solid gray" }}
                 className="w-50 btn"
                 type="number"
                 value={formData1?.price_before}
@@ -360,13 +575,15 @@ else{return<></>}
                     price_before: e.target.value,
                   })
                 }
-                required />
+                required
+              />
             </div>
             <div className="col-12 m-2 ">
               <label className="w-50" htmlFor="priceAfter">
                 Price After
               </label>
-              <input style={{ border: "1px solid gray" }}
+              <input
+                style={{ border: "1px solid gray" }}
                 className="w-50 btn"
                 type="number"
                 value={formData1?.price_after}
@@ -383,12 +600,12 @@ else{return<></>}
               />
             </div>
 
-            
             <div className="col-12 m-2 ">
               <label className="w-50" htmlFor="type">
                 Type
               </label>
-              <input style={{ border: "1px solid gray" }}
+              <input
+                style={{ border: "1px solid gray" }}
                 className="w-50 btn"
                 value={formData1?.type}
                 type="text"
@@ -408,7 +625,8 @@ else{return<></>}
               <label className="w-50" htmlFor="brandName">
                 Brand Name
               </label>
-              <input style={{ border: "1px solid gray" }}
+              <input
+                style={{ border: "1px solid gray" }}
                 className="w-50 btn"
                 type="text"
                 value={formData1?.nameOfBrand}
@@ -433,10 +651,15 @@ else{return<></>}
               </div>
             </div>
             <div className="col-12 m-2 ">
-              <label className="w-50 " htmlFor="description" style={{position:"relative",bottom:"180px"}}>
+              <label
+                className="w-50 "
+                htmlFor="description"
+                style={{ position: "relative", bottom: "180px" }}
+              >
                 Description
               </label>
-              <textarea style={{ border: "1px solid gray" ,height:"200px"}}
+              <textarea
+                style={{ border: "1px solid gray", height: "200px" }}
                 className="w-50"
                 type="text"
                 name="description"
@@ -452,37 +675,48 @@ else{return<></>}
                 required
               />
             </div>
-            <div style={{display:"flex",flexDirection:"row",width:"100%" }}>
+            <div
+              style={{ display: "flex", flexDirection: "row", width: "100%" }}
+            >
               clothing?
-            <select style={{width:"50%"}} value={clothing} onChange={handleOptionChange}>
-                        {options.map((option, index) => (
-                        <option key={index} value={option}>
+              <select
+                style={{ width: "50%" }}
+                value={clothing}
+                onChange={handleOptionChange}
+              >
+                {options.map((option, index) => (
+                  <option key={index} value={option}>
                     {String(option)}
-                </option>
+                  </option>
                 ))}
-                        </select></div>
-            
-            {clothing ?<Clothingtrue/>:
-            
-            <div className="col-12 m-2 " >
-              <label className="w-50" htmlFor="quantity">
-                quantity
-              </label>
-              <input style={{ border: "1px solid gray" }}
-                className="w-50 btn"
-                type="number"
-                value={formData1?.quantity}
-                name="priceBefore"
-                id="priceBefore"
-                placeholder="Enter Price Before"
-                onChange={(e) =>
-                  setFormData({
-                    ...formData1,
-                    quantity: e.target.value,
-                  })
-                }
-                required />
-            </div>}
+              </select>
+            </div>
+
+            {clothing === "true" ? (
+              <Clothingtrue />
+            ) : (
+              <div className="col-12 m-2 ">
+                <label className="w-50" htmlFor="quantity">
+                  quantity
+                </label>
+                <input
+                  style={{ border: "1px solid gray" }}
+                  className="w-50 btn"
+                  type="number"
+                  value={formData1?.quantity}
+                  name="priceBefore"
+                  id="priceBefore"
+                  placeholder="Enter Price Before"
+                  onChange={(e) =>
+                    setFormData({
+                      ...formData1,
+                      quantity: e.target.value,
+                    })
+                  }
+                  required
+                />
+              </div>
+            )}
             <div className="col-12 m-2 ">
               <label className="w-50" htmlFor="description">
                 Number of images
@@ -500,8 +734,7 @@ else{return<></>}
               </select>
             </div>
             {Array.isArray(images) &&
-              images?.map((img, index) =>
-              (
+              images?.map((img, index) => (
                 <div key={index} style={{ width: "100%" }}>
                   <div className="col-12 m-2 ">
                     <label className="w-50" htmlFor="description">
@@ -510,21 +743,23 @@ else{return<></>}
                     <input type="file" onChange={handleChange} />
                   </div>
                 </div>
-              )
-              )}
-            <button  className="col-12 m-1 my-4 btn btn-secondary  " onClick={() => { addProduct() }}>
+              ))}
+            <button
+              className="col-12 m-1 my-4 btn btn-secondary  "
+              onClick={() => {
+                addProduct();
+              }}
+            >
               Add Product
             </button>
           </div>
         </div>
-        
-      
       </div>
     </div>
   );
 }
 
-const Picker=()=>{
+const Picker = () => {
   const [sketchPickerColor, setSketchPickerColor] = useState({
     r: "241",
     g: "112",
@@ -532,30 +767,26 @@ const Picker=()=>{
     a: "1",
   });
   const { r, g, b, a } = sketchPickerColor;
-  return(
+  return (
     <div className="sketchpicker">
-        <h6>Sketch Picker</h6>
-        {/* Div to display the color  */}
-        <div
-          style={{
-            backgroundColor: `rgba(${r},${g},${b},${a})`,
-            width: 50,
-            height: 50,
-            border: "2px solid white",
-          }}
-        ></div>
-        <SketchPicker
-          onChange={(color) => {
-            setSketchPickerColor(color.rgb);
-          }}
-          color={sketchPickerColor}
-        />
-      </div>
-  )
-}
-
-
+      <h6>Sketch Picker</h6>
+      {/* Div to display the color  */}
+      <div
+        style={{
+          backgroundColor: `rgba(${r},${g},${b},${a})`,
+          width: 50,
+          height: 50,
+          border: "2px solid white",
+        }}
+      ></div>
+      <SketchPicker
+        onChange={(color) => {
+          setSketchPickerColor(color.rgb);
+        }}
+        color={sketchPickerColor}
+      />
+    </div>
+  );
+};
 
 export default AddProduct;
-
-
