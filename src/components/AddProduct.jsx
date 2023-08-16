@@ -178,13 +178,13 @@ function AddProduct() {
     formData.append("nameOfBrand", formData1.nameOfBrand);
     formData.append("description", JSON.stringify(formData1.description));
     formData.append("clothing", clothing === "true");
-   /* if (clothing === "true") {
+   if (clothing === "true") {
       formData.append("gender", gender);
       formData.append("vrpos", vrpos);
       if (vrpos === "bottoms") {
         formData.append("vrpossec", sec);
       }
-    }*/
+    }
     formData.append("colors", JSON.stringify(Colors));
     formData.append("sizes", JSON.stringify(sizeQuantities));
 
