@@ -36,12 +36,12 @@ function AddProduct() {
     "white",
     "green",
   ]);
-  const [gender, setgender] = useState("");
+  const [gender, setgender] = useState("female");
   const genderarr = ["female", "male"];
   const vrposarr = ["tops", "bottoms", "outerwear", "allbody"];
   const vrpossecarr = ["pants", "shorts", "skirts"];
-  const [vrpos, setVRPOS] = useState("");
-  const [sec, setVRPOSsec] = useState("");
+  const [vrpos, setVRPOS] = useState("tops");
+  const [sec, setVRPOSsec] = useState("pants");
   const [sizeQuantities, setSizeQuantities] = useState({
     S: [0, 0, 0, 0, 0, 0],
     M: [0, 0, 0, 0, 0, 0],
