@@ -32,9 +32,11 @@ function LeftPanel({ setpage }) {
             <ul>
               <li onClick={changePage} >Add Product</li>
               <li onClick={changePage} >Add Product from excel</li>
-              <li onClick={changePage}>Hidden Product</li>
+              <li onClick={changePage}>Product</li>
               <li onClick={changePage}>Delete Product</li>
               <li onClick={changePage}>Update Product</li>
+              <li onClick={changePage}>First visit</li>
+              <li onClick={changePage}>Super deals</li>
             </ul>
           </div>
         </div>
@@ -51,7 +53,7 @@ function LeftPanel({ setpage }) {
           <h4>User</h4>
           <ul>
             <li onClick={changePage}>Users</li>
-            <li onClick={changePage}>Pan User</li>
+            <li onClick={changePage}>Ban User</li>
           </ul>
         </div>
         <div className='left-panel-item left-sub-item'>

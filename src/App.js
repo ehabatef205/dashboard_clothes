@@ -16,6 +16,8 @@ import Orders from './components/orders';
 import Returns from './components/returns';
 import UserView from './components/users';
 import { auth } from './api/ADMIN';
+import Superdeals from './components/Superdeals'
+import Firstvisit from './components/Firstvisit'
 
 function App() {
   const [page, setPage] = useState('#')
@@ -49,15 +51,17 @@ function App() {
           {page === 'View Sub Category' && <SubCategory />}
           {page === 'Add Product' && <AddProduct />}
           {page === 'Add Product from excel' && <AddProductFromExcel />}
-          {page === 'Hidden Product' && <HiddenProduct />}
+          {page === 'Product' && <HiddenProduct />}
           {page === 'Delete Product' && <DeleteProduct />}
           {page === 'Update Product' && <UpdateProduct />}
           {page === 'Orders' && <Orders/>}
+          {page === 'First visit' && <Firstvisit />}
+          {page === 'Super deals' && <Superdeals/>}
           {page === 'Returns' && <Returns/>}
           {page === 'Shipping' && <h1 className='d-flex bg-light mx-5  h-50 headerone'>Operation Under Design</h1>}
-          {page === 'Analytics' && <h1 className='d-flex bg-light mx-5  h-50 headerone'>welcome to our admin panel please choose what to do from the side panel.</h1>}
+          {page === 'Analytics' && <h1 className='d-flex bg-light mx-5  h-50 headerone'>Waitting for real Analytics  .</h1>}
           {page === 'Users' && <UserView />}
-          {page === 'Pan User' && <PanUser />}
+          {page === 'Ban User' && <PanUser />}
           {page === 'Create Supplier' && <CreateSupplier />}
           {page === 'Edit Suppliers' && <SupplierList />}
           {page === 'Logout' && <h1 className='d-flex bg-light mx-5  h-50 headerone'>welcome to our admin panel please choose what to do from the side panel.</h1>}

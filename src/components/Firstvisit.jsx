@@ -5,8 +5,8 @@ import * as sub_category from '../api/subcategory'
 import * as product from '../api/product'
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-function HiddenProduct() {
 
+export default function Firstvisit() {
     const [categories, setCategories] = useState([])
     const [selectedCategoryValue, setSelectedCategoryValue] = useState("");
 
@@ -54,11 +54,10 @@ function HiddenProduct() {
             console.log(e.response)
         })
     }
-
-    return (
-        <div>
+  return (
+    <div>
             <div className='hidden bg-light mx-5 '>
-                <h1 className='col-12 ' style={{ borderBottom: "1px solid gray", textAlign: "center" }} >Product</h1>
+                <h1 className='col-12 ' style={{ borderBottom: "1px solid gray", textAlign: "center" }} >First visit products</h1>
 
                 <form className='col-12  m-2'>
                     <div
@@ -101,12 +100,12 @@ function HiddenProduct() {
                                 <tr>
                                     <th>index</th>
                                     <th>Name</th>
-                                    <th>View</th>
+                                    <th>selection</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 {products.map((product1, index) => (
-                                    <TrHiddenProduct key={index} index={index + 1} product={product1} />
+                                    <FirstProduct key={index} index={index + 1} product={product1} />
                                 ))}
                                 
                             </tbody>
@@ -114,42 +113,48 @@ function HiddenProduct() {
                         
                     </div>
                 </form>
-            </div></div>
+                <div className='w-100 m-5 d-flex justify-content-center' >
+                    <button className='btn w-50 btn-outline-secondary' 
+                    // onClick={}
+                    >add as First visit </button>
+                </div>
+            </div>
+            </div>
     )
 }
 
-export default HiddenProduct
 
-function TrHiddenProduct(props) {
 
-    const [view, setView] = useState(props.product.view)
+function FirstProduct(props) {
 
-    const hidden = async (id) => {
-        await product.update_view_product(id, !view).then(res => {
-            setView(!view)
+    const [visited, setvisited] = useState(false)
+    const first = async (id) => {
+        // await product.update_visited_product(id, !visited).then(res => {
           
-            if (view ===true){
-                toast.error("The product is hidden ", {
-                    position: toast.POSITION.TOP_RIGHT
-                  }) 
+        //     setvisited(!visited)
+          
+        //     if (visited ===true){
+        //         toast.error("The product is hidden ", {
+        //             position: toast.POSITION.TOP_RIGHT
+        //           }) 
                
-            }else{
-                toast.success("The product is viewed ", {
-                    position: toast.POSITION.TOP_RIGHT
-                  }) 
-            }
-        })
+        //     }else{
+        //         toast.success("The product is visiteded ", {
+        //             position: toast.POSITION.TOP_RIGHT
+        //           }) 
+        //     }
+        // })
     }
 
     return (
         <tr>
             <td>{props.index}</td>
             <td>{props.product.name}</td>
-            <td><input type="checkbox" checked={view} onChange={() => { hidden(props.product._id)  }} style={{ height: "18px", width: "18px" }} /></td>
+            <td><input type="checkbox" checked={visited} onChange={() => { first(props.product._id)  }} style={{ height: "18px", width: "18px" }} /></td>
          <ToastContainer />
         </tr>
        
     )
 }
 
-export { TrHiddenProduct }
+export { FirstProduct }

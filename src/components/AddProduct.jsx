@@ -67,7 +67,7 @@ function AddProduct() {
       SKU: "",
       price_before: 0,
       price_after: 0,
-      type: "",
+     
       nameOfBrand: "",
       description: "",
     });
@@ -107,7 +107,7 @@ function AddProduct() {
     SKU: "",
     price_before: 0,
     price_after: 0,
-    type: "",
+   
     nameOfBrand: "",
     description: "",
   });
@@ -483,7 +483,7 @@ function AddProduct() {
           <div className="d-flex flex-wrap ">
             <div className="col-12 m-2 ">
               <label className="w-50" htmlFor="description">
-                Category
+                Category <b className="text-danger" style={{fontSize:"1.3rem"}}>*</b>
               </label>
               <select
                 value={selectedCategoryValue}
@@ -498,8 +498,8 @@ function AddProduct() {
               </select>
             </div>
             <div className="col-12 m-2 ">
-              <label className="w-50" htmlFor="description">
-                Sub category
+              <label className="w-50" htmlFor="description" >
+                Sub category <b className="text-danger" style={{fontSize:"1.3rem"}}>*</b>
               </label>
               <select
                 value={selectedSubCategoryValue}
@@ -515,8 +515,8 @@ function AddProduct() {
             </div>
 
             <div className="col-12 m-2 ">
-              <label className="w-50" htmlFor="name">
-                Name
+              <label className="w-50" htmlFor="name" >
+                Name <b className="text-danger" style={{fontSize:"1.3rem"}}>*</b>
               </label>
               <input
                 style={{ border: "1px solid gray" }}
@@ -538,7 +538,7 @@ function AddProduct() {
 
             <div className="col-12 m-2 ">
               <label className="w-50" htmlFor="SKU">
-                SKU
+                SKU <b className="text-danger" style={{fontSize:"1.3rem"}}>*</b>
               </label>
               <input
                 style={{ border: "1px solid gray" }}
@@ -560,7 +560,7 @@ function AddProduct() {
 
             <div className="col-12 m-2 ">
               <label className="w-50" htmlFor="priceBefore">
-                Price Before
+                Price Before <b className="text-danger" style={{fontSize:"1.3rem"}}>*</b>
               </label>
               <input
                 style={{ border: "1px solid gray" }}
@@ -581,7 +581,7 @@ function AddProduct() {
             </div>
             <div className="col-12 m-2 ">
               <label className="w-50" htmlFor="priceAfter">
-                Price After
+                Price After <b className="text-danger" style={{fontSize:"1.3rem"}}>*</b>
               </label>
               <input
                 style={{ border: "1px solid gray" }}
@@ -602,29 +602,8 @@ function AddProduct() {
             </div>
 
             <div className="col-12 m-2 ">
-              <label className="w-50" htmlFor="type">
-                Type
-              </label>
-              <input
-                style={{ border: "1px solid gray" }}
-                className="w-50 btn"
-                value={formData1?.type}
-                type="text"
-                name="type"
-                id="type"
-                placeholder="Enter Type"
-                onChange={(e) =>
-                  setFormData({
-                    ...formData1,
-                    type: e.target.value,
-                  })
-                }
-                required
-              />
-            </div>
-            <div className="col-12 m-2 ">
               <label className="w-50" htmlFor="brandName">
-                Brand Name
+                Brand Name 
               </label>
               <input
                 style={{ border: "1px solid gray" }}
@@ -679,7 +658,7 @@ function AddProduct() {
             <div
               style={{ display: "flex", flexDirection: "row", width: "100%" }}
             >
-              clothing?
+           <span className="w-50"> clothing? <b className="text-danger" style={{fontSize:"1.3rem"}}>*</b></span>    
               <select
                 style={{ width: "50%" }}
                 value={clothing}
@@ -698,7 +677,7 @@ function AddProduct() {
             ) : (
               <div className="col-12 m-2 ">
                 <label className="w-50" htmlFor="quantity">
-                  quantity
+                  quantity <b className="text-danger" style={{fontSize:"1.3rem"}}>*</b>
                 </label>
                 <input
                   style={{ border: "1px solid gray" }}
@@ -718,22 +697,7 @@ function AddProduct() {
                 />
               </div>
             )}
-            <div className="col-12 m-2 ">
-              <label className="w-50" htmlFor="description">
-                Number of images
-              </label>
-              <select
-                value={selectedValue}
-                style={{ width: "50%" }}
-                onChange={handleSelectChange}
-              >
-                {integerValues.map((value) => (
-                  <option key={value} value={value}>
-                    {value}
-                  </option>
-                ))}
-              </select>
-            </div>
+            
             {Array.isArray(images) &&
               images?.map((img, index) => (
                 <div key={index} style={{ width: "100%" }}>

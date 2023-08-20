@@ -1,7 +1,8 @@
 import React from "react";
 import "./add_products.css";
 import { add_supplier } from "../api/supplier_access";
-
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 function CreateSupplier() {
 
   const [formData, setFormData] = React.useState({
@@ -21,6 +22,9 @@ function CreateSupplier() {
   const handleSubmit = (e) => {
     e.preventDefault();
     add_supplier(formData.name,formData.email,formData.password)
+    toast.success("Done ", {
+      position: toast.POSITION.TOP_RIGHT
+    })
   };
 
   return (
@@ -88,6 +92,7 @@ function CreateSupplier() {
           </div>
         </form>
       </div>
+      <ToastContainer />
     </div>
   );
 }
