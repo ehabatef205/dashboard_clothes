@@ -5,7 +5,7 @@ import * as main_category from "../api/product_category";
 import * as sub_category from "../api/subcategory";
 
 import axios from "axios";
-import { json } from "body-parser";
+
 
 function AddProduct() {
   const [clothing, setclothing] = useState(false);
@@ -219,7 +219,7 @@ function AddProduct() {
     if(sizecolorstate==="none")
      formData.append("quantity.total", parseInt(formData1.quantity));
     else{
-      formData.append('quantity',json.stringify(Quantities))
+      formData.append('quantity',JSON.stringify(Quantities))
     }
     formData.append("type", formData1.type);
     formData.append("nameOfBrand", formData1.nameOfBrand);
