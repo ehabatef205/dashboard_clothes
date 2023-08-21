@@ -4,7 +4,8 @@ import * as main_category from '../api/product_category'
 import * as sub_category from '../api/subcategory'
 import * as product from '../api/product'
 import { AiOutlineDelete } from 'react-icons/ai';
-
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 function DeleteProduct() {
 
   const [categories, setCategories] = useState([])
@@ -55,14 +56,38 @@ function DeleteProduct() {
     })
   }
 
-  const deleteProduct = async (id) => {
-    await product.delete_product(id).then(res => {
-      setProducts((current) =>
-        current.filter((fruit) => fruit._id !== id)
-      );
-    })
-  }
+  // const deleteProduct = async (id) => {
+  //   await product.delete_product(id).then(res => {
+  //     setProducts((current) =>
+  //       current.filter((fruit) => fruit._id !== id)
+  //     );
+  //   })
+  // }
 
+
+  ///////////
+  const [showConfirmation, setShowConfirmation] = useState(false);
+const [selectedProductId, setSelectedProductId] = useState(null);
+const handleDeleteClick = (productId) => {
+  setSelectedProductId(productId);
+  setShowConfirmation(true);
+};
+const confirmDelete = async (id) => {
+  await product.delete_product(id).then(res => {
+    setProducts((current) =>
+      current.filter((fruit) => fruit._id !== id)
+    );
+  })
+   toast.success("Done ", {
+      position: toast.POSITION.TOP_RIGHT
+    })
+  setShowConfirmation(false);
+};
+
+const cancelDelete = () => {
+  setSelectedProductId(null);
+  setShowConfirmation(false);
+};
   return (
     <div>
       <div className='delete bg-light mx-5 '>
@@ -117,14 +142,32 @@ function DeleteProduct() {
                   <tr key={index}>
                     <td>{index + 1}</td>
                     <td>{product1.name}</td>
-                    <td><AiOutlineDelete style={{ fontSize: "25px", cursor: "pointer" }} onClick={() => { deleteProduct(product1._id) }} /></td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+                    <td>
+                <AiOutlineDelete
+                  style={{ fontSize: "25px", cursor: "pointer" }}
+                  onClick={() => handleDeleteClick(product1._id)}
+                />
+              </td>
+            </tr>
+          ))}
+         
+        </tbody>
+      </table>
+
+      
           </div>
         </form>
-      </div></div>
+      </div>
+      {showConfirmation && (
+        <div className="confirmation-modal">
+          <div className="confirmation-modal-content">
+            <p>Are you sure you want to delete this product?</p>
+            <button onClick={() => confirmDelete(selectedProductId)}>Yes</button>
+            <button onClick={cancelDelete}>No</button>
+          </div>
+        </div>
+      )}
+       <ToastContainer /></div>
   )
 }
 

@@ -95,7 +95,7 @@ function Orders() {
           <h1>Orders</h1>
         </div>
         <div
-          className="w-100  addheder col-12 "
+          className="w-100  addheder col-12 bg-secondary-subtle "
           style={{
             borderBottom: "1px solid gray",
             textAlign: "center",

@@ -79,7 +79,7 @@ function UpdateProduct() {
           >
             <div className="col-12 m-2 ">
               <label className="w-50" htmlFor="description">
-                Category
+                Category <b className="text-danger" style={{fontSize:"1.3rem"}}>*</b>
               </label>
               <select
                 value={selectedCategoryValue}
@@ -95,7 +95,7 @@ function UpdateProduct() {
             </div>
             <div className="col-12 m-2 ">
               <label className="w-50" htmlFor="description">
-                Sub category
+                Sub category <b className="text-danger" style={{fontSize:"1.3rem"}}>*</b>
               </label>
               <select
                 value={selectedSubCategoryValue}
