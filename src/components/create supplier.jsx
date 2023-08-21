@@ -1,9 +1,113 @@
 import React from "react";
 import "./add_products.css";
+import "./subblier.css";
 import { add_supplier } from "../api/supplier_access";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-function CreateSupplier() {
+import { Form } from "react-router-dom";
+import { useState } from "react";
+
+const CreateSupplier = () => {
+
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+    password: '',
+    
+  })
+  const [errors, setErrors] = useState({})
+
+  const handleChange = (e) => {
+    const {name, value} = e.target;
+    setFormData({
+        ...formData, [name] : value
+    })
+  }
+
+  const handleSubmit = (e) => {
+    e.preventDefault()
+    const validationErrors = {}
+    if(!formData.name.trim()) {
+        validationErrors.name = "name is required"
+    }
+
+    if(!formData.email.trim()) {
+        validationErrors.email = "email is required"
+    } else if(!/\S+@\S+\.\S+/.test(formData.email)){
+        validationErrors.email = "email is not valid"
+    }
+
+    if(!formData.password.trim()) {
+        validationErrors.password = "password is required"
+    } else if(formData.password.length < 6){
+        validationErrors.password = "password should be at least 6 char"
+    }
+
+    setErrors(validationErrors)
+
+    if(Object.keys(validationErrors).length === 0) {
+        alert("Form Submitted successfully")
+    }
+
+  }
+
+  return (
+    <form onSubmit={handleSubmit}>
+      <div>
+        <label>name:</label>
+        <input
+          type="text"
+          name="name"
+          placeholder='name'  
+          autoComplete='off'  
+          onChange={handleChange}   
+        />
+          {errors.username && <span>{errors.username}</span>}  
+      </div>
+      <div>
+        <label>Email:</label>
+        <input
+          type="email"
+          name="email"
+          placeholder='example@gmail.com'
+          autoComplete='off'
+          onChange={handleChange} 
+        />
+          {errors.email && <span>{errors.email}</span>}  
+      </div>
+      <div>
+        <label>Password:</label>
+        <input
+          type="password"
+          name="password"
+          placeholder='******'
+          onChange={handleChange} 
+        />
+          {errors.password && <span>{errors.password}</span>}  
+      </div>
+      
+      <button type="submit">Submit</button>
+    </form>
+  );
+};
+
+export default CreateSupplier;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* function CreateSupplier() {
 
   const [formData, setFormData] = React.useState({
     name: "",
@@ -97,4 +201,4 @@ function CreateSupplier() {
   );
 }
 
-export default CreateSupplier;
+export default CreateSupplier; */

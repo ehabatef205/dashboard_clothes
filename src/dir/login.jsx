@@ -5,6 +5,7 @@ import * as admin from '../api/ADMIN'
 import { Cookies } from 'react-cookie'
 
 
+
 export default function Login({ onLogin }) {
     const cookie = new Cookies()
 
@@ -47,7 +48,7 @@ export default function Login({ onLogin }) {
                 style={login}
             >
                 <div className="" style={{ flexDirection: "column", height: "fit-content", width: "100vw", justifyContent: "center", alignItems: "center", display: "flex" }}>
-                    <h4>Log In</h4>
+                    <h4> Super Admin LogIn</h4>
                     <input
                         ref={emailRef}
                         style={inputText}
