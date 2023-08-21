@@ -5,9 +5,13 @@ import * as main_category from "../api/product_category";
 import * as sub_category from "../api/subcategory";
 
 import axios from "axios";
+import { json } from "body-parser";
 
 function AddProduct() {
   const [clothing, setclothing] = useState(false);
+  const [size, setsize] = useState(false);
+  const [color, setcolor] = useState(false);
+  const [sizecolorstate, setsizecolorstate] = useState("");
   const [creatingnew, setcreatingnew] = useState(false);
   const addcoloraction = () => {
     setcreatingnew(!creatingnew);
@@ -15,17 +19,85 @@ function AddProduct() {
   };
   const [sucessview, setsucessview] = useState("");
   const options = [true, false];
+  const sizeable = [true, false];
+  const colors = [true, false];
   const handleOptionChange = (event) => {
     setclothing(event.target.value);
     console.log(clothing);
   };
-  const [colorhex, setcolorhex] = useState("");
+  const handleSizeableChange = (event) => {
+    setsize(event.target.value === "true");
+    console.log(clothing);
+  };
+  const handleColorsChange = (event) => {
+    setcolor(event.target.value === "true");
+    console.log(clothing);
+  };
+  const [newMainKey, setNewMainKey] = useState("");
+  const [newNestedKey, setNewNestedKey] = useState("");
+  const [newNestedValue, setNewNestedValue] = useState("");
 
-  const integerValues = [1, 2, 3, 4, 5];
+  const handleMainKeyChange = (event) => {
+    setNewMainKey(event.target.value);
+  };
+
+  const handleNestedKeyChange = (event) => {
+    setNewNestedKey(event.target.value);
+  };
+
+  const handleNestedValueChange = (event) => {
+    setNewNestedValue(event.target.value);
+  };
+
+  const handleAddNestedField = () => {
+    if (newMainKey && newNestedKey && newNestedValue) {
+      setQuantities((prevQuantities) => ({
+        ...prevQuantities,
+        [newMainKey]: {
+          ...(prevQuantities[newMainKey] || {}),
+          [newNestedKey]: newNestedValue,
+        },
+      }));
+      setNewNestedKey("");
+      setNewNestedValue("");
+    }
+  };
+  const [newKey, setNewKey] = useState("");
+  const [newValue, setNewValue] = useState("");
+
+  const handleKeyChange = (event) => {
+    setNewKey(event.target.value);
+  };
+
+  const handleValueChange = (event) => {
+    setNewValue(event.target.value);
+  };
+
+  const [colorhex, setcolorhex] = useState("");
+  const handleAddField = () => {
+    if (newKey && newValue) {
+      setQuantities((prevQuantities) => ({
+        ...prevQuantities,
+        [newKey]: parseInt(newValue),
+      }));
+      setNewKey("");
+      setNewValue("");
+    }
+  };
+  const handleAddFieldcolor = () => {
+    if (newKey && newValue) {
+      setQuantities((prevQuantities) => ({
+        ...prevQuantities,
+        ["#" + newKey]: newValue,
+      }));
+      setNewKey("");
+      setNewValue("");
+    }
+  };
   const [images, setImages] = useState(Array(5).fill(""));
   const [image, setImage] = useState([]);
   const [selectedValue, setSelectedValue] = useState(1);
-
+  const [Quantities, setQuantities] = useState({});
   const [categories, setCategories] = useState([]);
   const [selectedCategoryValue, setSelectedCategoryValue] = useState("");
   const [Colors, setColors] = useState([
@@ -51,15 +123,9 @@ function AddProduct() {
   });
   const sentsuccess = () => {
     setSelectedValue(1);
-    setColors(["red", "blue", "orange", "black", "white", "green"]);
-    setSizeQuantities({
-      S: [0, 0, 0, 0, 0, 0],
-      M: [0, 0, 0, 0, 0, 0],
-      L: [0, 0, 0, 0, 0, 0],
-      XL: [0, 0, 0, 0, 0, 0],
-      XXL: [0, 0, 0, 0, 0, 0],
-    });
-
+    setsize(false);
+    setcolor(false);
+    setclothing(false);
     setFormData({
       supplier_id: "",
       name: "",
@@ -67,32 +133,15 @@ function AddProduct() {
       SKU: "",
       price_before: 0,
       price_after: 0,
-     
+
       nameOfBrand: "",
       description: "",
     });
     setImages(Array(5).fill(""));
+    setImage([]);
     window.scrollTo(0, 0);
   };
 
-  const addcolor = () => {
-    console.log(colorhex);
-    if (colorhex.length === 6) {
-      var initialColors = [...Colors];
-      initialColors.push(`#${colorhex}`);
-      console.log(initialColors);
-      const initialSizeQuantities = {
-        S: Array(initialColors.length).fill(0),
-        M: Array(initialColors.length).fill(0),
-        L: Array(initialColors.length).fill(0),
-        XL: Array(initialColors.length).fill(0),
-        XXL: Array(initialColors.length).fill(0),
-      };
-      setColors(initialColors);
-      setSizeQuantities(initialSizeQuantities);
-      setcreatingnew(false);
-    }
-  };
   const [clength, setclength] = useState(6);
   const [subCategories, setSubCategories] = useState([]);
 
@@ -107,16 +156,10 @@ function AddProduct() {
     SKU: "",
     price_before: 0,
     price_after: 0,
-   
+
     nameOfBrand: "",
     description: "",
   });
-
-  const handleSelectChange = (event) => {
-    const value = parseInt(event.target.value);
-    setSelectedValue(value);
-  };
-
   const handleSelectCategory = (event) => {
     setSelectedCategoryValue(event.target.value);
     getSubCategory(event.target.value);
@@ -160,7 +203,7 @@ function AddProduct() {
   };
 
   const addProduct = async () => {
-    const url = "http://5.183.9.124:5000/product/upload";
+    const url = "http://localhost:5000/product/upload";
     const formData = new FormData();
     for (let file of image) {
       formData.append("images", file);
@@ -173,242 +216,82 @@ function AddProduct() {
     formData.append("SKU", formData1.SKU);
     formData.append("price_before", formData1.price_before);
     formData.append("price_after", formData1.price_after);
-    formData.append("quantity", formData1.quantity);
+    if(sizecolorstate==="none")
+     formData.append("quantity.total", parseInt(formData1.quantity));
+    else{
+      formData.append('quantity',json.stringify(Quantities))
+    }
     formData.append("type", formData1.type);
     formData.append("nameOfBrand", formData1.nameOfBrand);
     formData.append("description", JSON.stringify(formData1.description));
-    formData.append("clothing", clothing === "true");
-   if (clothing === "true") {
+    formData.append("dressing", clothing === "true");
+    if (clothing === "true") {
       formData.append("gender", gender);
       formData.append("vrpos", vrpos);
       if (vrpos === "bottoms") {
         formData.append("vrpossec", sec);
       }
     }
-    formData.append("colors", JSON.stringify(Colors));
     formData.append("sizes", JSON.stringify(sizeQuantities));
-
     const config = {
       headers: {
         "content-type": "multipart/form-data",
       },
     };
     axios.post(url, formData, config).then((response) => {
-      if(response.data.response.name){
-        if(response.data.response.garment_id){
-          setsucessview("product added with dressing room option")
-        }
-        else{
-          setsucessview("product added successfully")
+      if (response.data.response.name) {
+        if (response.data.response.garment_id) {
+          setsucessview("product added with dressing room option");
+        } else {
+          setsucessview("product added successfully");
         }
 
-      sentsuccess();
-    }
-    else{
-      setsucessview("Operation failed , some error occurred")
-    }
+        sentsuccess();
+      } else {
+        setsucessview("Operation failed , some error occurred");
+      }
     });
   };
+
+  /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
   function handleChange(event) {
     setImage([...image, event.target.files[0]]);
   }
+  const [sizecolorselected, setsizecolorselected] = useState(false);
+  const sizecoloraction = () => {
+    if (size) {
+      if (color) {
+        setsizecolorstate("sizecolor");
+      } else {
+        setsizecolorstate("size");
+      }
+    } else {
+      if (color) {
+        setsizecolorstate("color");
+      } else {
+        setsizecolorstate("none");
+      }
+    }
+
+    setsizecolorselected(true);
+  };
+
   const Clothingtrue = () => {
     if (clothing)
       return (
         <>
-          <div style={{ display: "flex", flexDirection: "row", width: "100%" }}>
-            <div style={{ width: "50%" }}>
-              <label>Colors</label>
-              <button disabled={!clothing} onClick={addcoloraction}>
-                start adding more{" "}
-              </button>
-
-              {creatingnew ? (
-                <div>
-                  <input
-                    type="text"
-                    value={colorhex}
-                    style={{ width: "100%" }}
-                    onChange={(e) => {
-                      setcolorhex(e.target.value);
-                    }}
-                    placeholder="copy color hex here"
-                  ></input>
-                  <button disabled={!clothing} onClick={addcolor}>
-                    + add{" "}
-                  </button>
-                  <Picker></Picker>
-                </div>
-              ) : (
-                <></>
-              )}
-            </div>
-            <div
-              style={{
-                border: "1px solid gray",
-                display: "flex",
-                flexDirection: "row",
-                justifyContent: "space-between",
-                width: "50%",
-              }}
-            >
-              {Colors.map((color, index) => (
-                <button
-                  disabled={!clothing}
-                  style={{
-                    color: color,
-                    backgroundColor: color,
-                    borderRadius: "20px",
-                    width: `${100 / clength}%`,
-                  }}
-                >
-                  {" "}
-                  0
-                </button>
-              ))}
-            </div>
-          </div>
-
-          <label className="w-50" htmlFor="sizes">
-            Sizes
-          </label>
-          <div style={{ display: "flex", flexDirection: "row", width: "100%" }}>
-            <label className="w-50" htmlFor="sizes">
-              Quantity of s
-            </label>
-            <div
-              style={{
-                border: "1px solid gray",
-                display: "flex",
-                flexDirection: "row",
-                justifyContent: "space-between",
-                width: "50%",
-              }}
-            >
-              {Colors.map((color, index) => (
-                <input
-                  key={index}
-                  disabled={!clothing}
-                  type="number"
-                  value={sizeQuantities.S[index]}
-                  style={{ borderRadius: "5px", width: `${100 / clength}%` }}
-                  onChange={(e) =>
-                    updateSizeQuantity("S", index, e.target.value)
-                  }
-                />
-              ))}
-            </div>
-          </div>
-          <div style={{ display: "flex", flexDirection: "row", width: "100%" }}>
-            <label className="w-50" htmlFor="sizes">
-              Quantity of m
-            </label>
-            <div
-              style={{
-                border: "1px solid gray",
-                display: "flex",
-                flexDirection: "row",
-                justifyContent: "space-between",
-                width: "50%",
-              }}
-            >
-              {Colors.map((color, index) => (
-                <input
-                  key={index}
-                  disabled={!clothing}
-                  type="number"
-                  value={sizeQuantities.M[index]}
-                  style={{ borderRadius: "5px", width: `${100 / clength}%` }}
-                  onChange={(e) =>
-                    updateSizeQuantity("M", index, e.target.value)
-                  }
-                />
-              ))}
-            </div>
-          </div>
-          <div style={{ display: "flex", flexDirection: "row", width: "100%" }}>
-            <label className="w-50" htmlFor="sizes">
-              Quantity of l
-            </label>
-            <div
-              style={{
-                border: "1px solid gray",
-                display: "flex",
-                flexDirection: "row",
-                justifyContent: "space-between",
-                width: "50%",
-              }}
-            >
-              {Colors.map((color, index) => (
-                <input
-                  key={index}
-                  disabled={!clothing}
-                  type="number"
-                  value={sizeQuantities.L[index]}
-                  style={{ borderRadius: "5px", width: `${100 / clength}%` }}
-                  onChange={(e) =>
-                    updateSizeQuantity("L", index, e.target.value)
-                  }
-                />
-              ))}
-            </div>
-          </div>
-          <div style={{ display: "flex", flexDirection: "row", width: "100%" }}>
-            <label className="w-50" htmlFor="sizes">
-              Quantity of xl
-            </label>
-            <div
-              style={{
-                border: "1px solid gray",
-                display: "flex",
-                flexDirection: "row",
-                justifyContent: "space-between",
-                width: "50%",
-              }}
-            >
-              {Colors.map((color, index) => (
-                <input
-                  key={index}
-                  disabled={!clothing}
-                  type="number"
-                  value={sizeQuantities.XL[index]}
-                  style={{ borderRadius: "5px", width: `${100 / clength}%` }}
-                  onChange={(e) =>
-                    updateSizeQuantity("XL", index, e.target.value)
-                  }
-                />
-              ))}
-            </div>
-          </div>
-          <div style={{ display: "flex", flexDirection: "row", width: "100%" }}>
-            <label className="w-50" htmlFor="sizes">
-              Quantity of xxl
-            </label>
-            <div
-              style={{
-                border: "1px solid gray",
-                display: "flex",
-                flexDirection: "row",
-                justifyContent: "space-between",
-                width: "50%",
-              }}
-            >
-              {Colors.map((color, index) => (
-                <input
-                  key={index}
-                  disabled={!clothing}
-                  type="number"
-                  value={sizeQuantities.XXL[index]}
-                  style={{ borderRadius: "5px", width: `${100 / clength}%` }}
-                  onChange={(e) =>
-                    updateSizeQuantity("XXL", index, e.target.value)
-                  }
-                />
-              ))}
-            </div>
-          </div>
-          <div style={{ display: "flex", flexDirection: "row", width: "100%" }}>
+          {/*   */}
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "row",
+              width: "100%",
+              marginTop: "10px",
+              marginBottom: "10px",
+            }}
+          >
             <label className="w-50" htmlFor="sizes">
               gender
             </label>
@@ -425,7 +308,15 @@ function AddProduct() {
             </select>
           </div>
 
-          <div style={{ display: "flex", flexDirection: "row", width: "100%" }}>
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "row",
+              width: "100%",
+              marginTop: "10px",
+              marginBottom: "10px",
+            }}
+          >
             <label className="w-50" htmlFor="sizes">
               VR position
             </label>
@@ -443,7 +334,13 @@ function AddProduct() {
           </div>
           {vrpos === "bottoms" ? (
             <div
-              style={{ display: "flex", flexDirection: "row", width: "100%" }}
+              style={{
+                display: "flex",
+                flexDirection: "row",
+                width: "100%",
+                marginTop: "10px",
+                marginBottom: "10px",
+              }}
             >
               <label className="w-50" htmlFor="sizes">
                 VR possition bottom
@@ -483,7 +380,10 @@ function AddProduct() {
           <div className="d-flex flex-wrap ">
             <div className="col-12 m-2 ">
               <label className="w-50" htmlFor="description">
-                Category <b className="text-danger" style={{fontSize:"1.3rem"}}>*</b>
+                Category{" "}
+                <b className="text-danger" style={{ fontSize: "1.3rem" }}>
+                  *
+                </b>
               </label>
               <select
                 value={selectedCategoryValue}
@@ -498,8 +398,11 @@ function AddProduct() {
               </select>
             </div>
             <div className="col-12 m-2 ">
-              <label className="w-50" htmlFor="description" >
-                Sub category <b className="text-danger" style={{fontSize:"1.3rem"}}>*</b>
+              <label className="w-50" htmlFor="description">
+                Sub category{" "}
+                <b className="text-danger" style={{ fontSize: "1.3rem" }}>
+                  *
+                </b>
               </label>
               <select
                 value={selectedSubCategoryValue}
@@ -515,8 +418,11 @@ function AddProduct() {
             </div>
 
             <div className="col-12 m-2 ">
-              <label className="w-50" htmlFor="name" >
-                Name <b className="text-danger" style={{fontSize:"1.3rem"}}>*</b>
+              <label className="w-50" htmlFor="name">
+                Name{" "}
+                <b className="text-danger" style={{ fontSize: "1.3rem" }}>
+                  *
+                </b>
               </label>
               <input
                 style={{ border: "1px solid gray" }}
@@ -538,7 +444,10 @@ function AddProduct() {
 
             <div className="col-12 m-2 ">
               <label className="w-50" htmlFor="SKU">
-                SKU <b className="text-danger" style={{fontSize:"1.3rem"}}>*</b>
+                SKU{" "}
+                <b className="text-danger" style={{ fontSize: "1.3rem" }}>
+                  *
+                </b>
               </label>
               <input
                 style={{ border: "1px solid gray" }}
@@ -560,7 +469,10 @@ function AddProduct() {
 
             <div className="col-12 m-2 ">
               <label className="w-50" htmlFor="priceBefore">
-                Price Before <b className="text-danger" style={{fontSize:"1.3rem"}}>*</b>
+                Price Before{" "}
+                <b className="text-danger" style={{ fontSize: "1.3rem" }}>
+                  *
+                </b>
               </label>
               <input
                 style={{ border: "1px solid gray" }}
@@ -581,7 +493,10 @@ function AddProduct() {
             </div>
             <div className="col-12 m-2 ">
               <label className="w-50" htmlFor="priceAfter">
-                Price After <b className="text-danger" style={{fontSize:"1.3rem"}}>*</b>
+                Price After{" "}
+                <b className="text-danger" style={{ fontSize: "1.3rem" }}>
+                  *
+                </b>
               </label>
               <input
                 style={{ border: "1px solid gray" }}
@@ -603,7 +518,7 @@ function AddProduct() {
 
             <div className="col-12 m-2 ">
               <label className="w-50" htmlFor="brandName">
-                Brand Name 
+                Brand Name
               </label>
               <input
                 style={{ border: "1px solid gray" }}
@@ -656,9 +571,222 @@ function AddProduct() {
               />
             </div>
             <div
-              style={{ display: "flex", flexDirection: "row", width: "100%" }}
+              style={{
+                width: "100%",
+                border: "1px solid gray",
+                borderRadius: "20px",
+              }}
             >
-           <span className="w-50"> clothing? <b className="text-danger" style={{fontSize:"1.3rem"}}>*</b></span>    
+              {sizecolorselected ? (
+                <>
+                  {sizecolorstate === "none" && (
+                    <div className="col-12 m-2 ">
+                      <label style={{ width: "50%" }} htmlFor="quantity">
+                        quantity{" "}
+                        <b
+                          className="text-danger"
+                          style={{ fontSize: "1.3rem" }}
+                        >
+                          *
+                        </b>
+                      </label>
+                      <input
+                        style={{ border: "1px solid gray", width: "45%" }}
+                        type="number"
+                        value={formData1?.quantity}
+                        name="priceBefore"
+                        id="priceBefore"
+                        placeholder="Enter Price Before"
+                        onChange={(e) =>
+                          setFormData({
+                            ...formData1,
+                            quantity: e.target.value,
+                          })
+                        }
+                        required
+                      />
+                    </div>
+                  )}
+
+                  {sizecolorstate === "size" && (
+                    <div>
+                      <input
+                        type="text"
+                        placeholder="Enter size"
+                        value={newKey}
+                        onChange={handleKeyChange}
+                      />
+                      <input
+                        type="number"
+                        placeholder="Enter value"
+                        value={newValue}
+                        onChange={handleValueChange}
+                      />
+                      <button onClick={handleAddField}>Add Field</button>
+
+                      <div>
+                        <pre>{JSON.stringify(Quantities, null, 2)}</pre>
+                      </div>
+                    </div>
+                  )}
+                  {sizecolorstate === "color" && (
+                    <div>
+                      <input
+                        type="text"
+                        placeholder="Enter color hex"
+                        value={newKey}
+                        onChange={handleKeyChange}
+                      />
+                      <input
+                        type="number"
+                        placeholder="Enter number of items"
+                        value={newValue}
+                        onChange={handleValueChange}
+                      />
+                      <button onClick={handleAddFieldcolor}>Add Field</button>
+
+                      <div>
+                        <pre>{JSON.stringify(Quantities, null, 2)}</pre>
+                      </div>
+                    </div>
+                  )}
+                  {sizecolorstate === "sizecolor" && (
+                    <div>
+                      <input
+                        type="text"
+                        placeholder="Enter main key"
+                        value={newMainKey}
+                        onChange={handleMainKeyChange}
+                      />
+                      <input
+                        type="text"
+                        placeholder="Enter nested key"
+                        value={newNestedKey}
+                        onChange={handleNestedKeyChange}
+                      />
+                      <input
+                        type="text"
+                        placeholder="Enter nested value"
+                        value={newNestedValue}
+                        onChange={handleNestedValueChange}
+                      />
+                      <button onClick={handleAddNestedField}>
+                        Add Nested Field
+                      </button>
+                      <Picker></Picker>
+                      <div>
+                        <h2>Quantities Object</h2>
+                        <pre>{JSON.stringify(Quantities, null, 2)}</pre>
+                      </div>
+                    </div>
+                  )}
+                  {sizecolorstate === "color" && (
+                    <div>
+                      <input
+                        type="text"
+                        placeholder="Enter color hex"
+                        value={newKey}
+                        onChange={handleKeyChange}
+                      />
+                      <input
+                        type="number"
+                        placeholder="Enter number of items"
+                        value={newValue}
+                        onChange={handleValueChange}
+                      />
+                      <button onClick={handleAddFieldcolor}>Add Field</button>
+                      <Picker></Picker>
+                      <div>
+                        <pre>{JSON.stringify(Quantities, null, 2)}</pre>
+                      </div>
+                    </div>
+                  )}
+                </>
+              ) : (
+                <>
+                  <div
+                    style={{
+                      display: "flex",
+                      flexDirection: "row",
+                      width: "100%",
+                      marginTop: "10px",
+                      marginBottom: "10px",
+                    }}
+                  >
+                    <span className="w-50">
+                      {" "}
+                      Size avilable?{" "}
+                      <b className="text-danger" style={{ fontSize: "1.3rem" }}>
+                        *
+                      </b>
+                    </span>
+                    <select
+                      style={{ width: "50%" }}
+                      value={String(size)}
+                      onChange={handleSizeableChange}
+                    >
+                      {sizeable.map((option, index) => (
+                        <option key={index} value={option}>
+                          {String(option)}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                  <div
+                    style={{
+                      display: "flex",
+                      flexDirection: "row",
+                      width: "100%",
+                      marginTop: "10px",
+                      marginBottom: "10px",
+                    }}
+                  >
+                    <span className="w-50">
+                      {" "}
+                      colors avilable?{" "}
+                      <b className="text-danger" style={{ fontSize: "1.3rem" }}>
+                        *
+                      </b>
+                    </span>
+                    <select
+                      style={{ width: "50%" }}
+                      value={String(color)}
+                      onChange={handleColorsChange}
+                    >
+                      {colors.map((option, index) => (
+                        <option key={index} value={option}>
+                          {String(option)}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                  <button
+                    style={{ width: "100%" }}
+                    onClick={() => {
+                      sizecoloraction();
+                    }}
+                  >
+                    Apply size - color status
+                  </button>
+                </>
+              )}
+            </div>
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "row",
+                width: "100%",
+                marginTop: "10px",
+                marginBottom: "10px",
+              }}
+            >
+              <span className="w-50">
+                {" "}
+                Dressing room avilable?{" "}
+                <b className="text-danger" style={{ fontSize: "1.3rem" }}>
+                  *
+                </b>
+              </span>
               <select
                 style={{ width: "50%" }}
                 value={clothing}
@@ -672,32 +800,8 @@ function AddProduct() {
               </select>
             </div>
 
-            {clothing === "true" ? (
-              <Clothingtrue />
-            ) : (
-              <div className="col-12 m-2 ">
-                <label className="w-50" htmlFor="quantity">
-                  quantity <b className="text-danger" style={{fontSize:"1.3rem"}}>*</b>
-                </label>
-                <input
-                  style={{ border: "1px solid gray" }}
-                  className="w-50 btn"
-                  type="number"
-                  value={formData1?.quantity}
-                  name="priceBefore"
-                  id="priceBefore"
-                  placeholder="Enter Price Before"
-                  onChange={(e) =>
-                    setFormData({
-                      ...formData1,
-                      quantity: e.target.value,
-                    })
-                  }
-                  required
-                />
-              </div>
-            )}
-            
+            {clothing === "true" ? <Clothingtrue /> : <></>}
+
             {Array.isArray(images) &&
               images?.map((img, index) => (
                 <div key={index} style={{ width: "100%" }}>
