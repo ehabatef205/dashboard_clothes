@@ -73,7 +73,7 @@ function UpdateProduct() {
         >
           <h1>Update Product</h1>
         </div>
-        <form className=" col-12 h-75 my-5 ">
+        <form className=" col-12 h-75 my-5 " onSubmit={(e)=>{e.preventDefault()}}>
           <div
             className="d-flex flex-wrap "
           >
