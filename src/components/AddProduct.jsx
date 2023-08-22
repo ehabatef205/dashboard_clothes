@@ -114,14 +114,9 @@ function AddProduct() {
   const vrpossecarr = ["pants", "shorts", "skirts"];
   const [vrpos, setVRPOS] = useState("tops");
   const [sec, setVRPOSsec] = useState("pants");
-  const [sizeQuantities, setSizeQuantities] = useState({
-    S: [0, 0, 0, 0, 0, 0],
-    M: [0, 0, 0, 0, 0, 0],
-    L: [0, 0, 0, 0, 0, 0],
-    XL: [0, 0, 0, 0, 0, 0],
-    XXL: [0, 0, 0, 0, 0, 0],
-  });
+
   const sentsuccess = () => {
+    setQuantities({})
     setSelectedValue(1);
     setsize(false);
     setcolor(false);
@@ -147,7 +142,6 @@ function AddProduct() {
 
   const [selectedSubCategoryValue, setSelectedSubCategoryValue] = useState("");
 
-  const [brandLogo, setBrandLogo] = useState("");
 
   const [formData1, setFormData] = useState({
     supplier_id: "",
@@ -194,17 +188,9 @@ function AddProduct() {
     });
   };
 
-  const updateSizeQuantity = (size, index, newValue) => {
-    setSizeQuantities((prevQuantities) => {
-      const updatedQuantities = { ...prevQuantities };
-      updatedQuantities[size][index] = newValue;
-      return updatedQuantities;
-    });
-  };
-
   const addProduct = async (e) => {
     e.preventDefault()
-    const url = "http://5.183.9.124:5000/product/upload";
+    const url = "http://localhost:5000/product/upload";
     const formData = new FormData();
     for (let file of image) {
       formData.append("images", file);
@@ -217,11 +203,6 @@ function AddProduct() {
     formData.append("SKU", formData1.SKU);
     formData.append("price_before", formData1.price_before);
     formData.append("price_after", formData1.price_after);
-    if(sizecolorstate==="none")
-     formData.append("quantity.total", parseInt(formData1.quantity));
-    else{
-      formData.append('quantity',JSON.stringify(Quantities))
-    }
     formData.append("type", formData1.type);
     formData.append("nameOfBrand", formData1.nameOfBrand);
     formData.append("description", JSON.stringify(formData1.description));
@@ -233,7 +214,9 @@ function AddProduct() {
         formData.append("vrpossec", sec);
       }
     }
-    formData.append("sizes", JSON.stringify(sizeQuantities));
+    formData.append("quantity",JSON.stringify(Quantities))
+    formData.append("colors",color==="true")
+    formData.append("sizeable",sizeable==="true")
     const config = {
       headers: {
         "content-type": "multipart/form-data",
@@ -377,7 +360,7 @@ function AddProduct() {
           <h1>Add Product</h1>
           <h3 className="text-danger">{sucessview}</h3>
         </div>
-        <form className="w-100"  onSubmit={addProduct}  >
+        <form className="w-100" onSubmit={addProduct}   >
         <div className=" col-12 h-75 my-5 w-100">
           <div className="d-flex flex-wrap ">
             <div className="col-12 m-2 ">
@@ -601,15 +584,11 @@ function AddProduct() {
                       <input
                         style={{ border: "1px solid gray", width: "45%" }}
                         type="number"
-                        value={formData1?.quantity}
-                        name="priceBefore"
-                        id="priceBefore"
-                        placeholder="Enter Price Before"
+                        value={Quantities?.avilable}
+                        
+                        placeholder="Enter avilable amount"
                         onChange={(e) =>
-                          setFormData({
-                            ...formData1,
-                            quantity: e.target.value,
-                          })
+                          setQuantities({avilable:e.target.value})
                         }
                         required
                       />
@@ -630,7 +609,7 @@ function AddProduct() {
                         value={newValue}
                         onChange={handleValueChange}
                       />
-                      <button onClick={handleAddField}>Add Field</button>
+                      <button type="button"  onClick={handleAddField}>Add Field</button>
 
                       <div>
                         <pre>{JSON.stringify(Quantities, null, 2)}</pre>
@@ -662,23 +641,23 @@ function AddProduct() {
                     <div>
                       <input
                         type="text"
-                        placeholder="Enter main key"
+                        placeholder="Enter size"
                         value={newMainKey}
                         onChange={handleMainKeyChange}
                       />
                       <input
                         type="text"
-                        placeholder="Enter nested key"
+                        placeholder="Enter color hex"
                         value={newNestedKey}
                         onChange={handleNestedKeyChange}
                       />
                       <input
                         type="text"
-                        placeholder="Enter nested value"
+                        placeholder="Enter quantity"
                         value={newNestedValue}
                         onChange={handleNestedValueChange}
                       />
-                      <button onClick={handleAddNestedField}>
+                      <button  type="button" onClick={handleAddNestedField}>
                         Add Nested Field
                       </button>
                       <Picker></Picker>
@@ -702,7 +681,7 @@ function AddProduct() {
                         value={newValue}
                         onChange={handleValueChange}
                       />
-                      <button onClick={handleAddFieldcolor}>Add Field</button>
+                      <button onClick={handleAddFieldcolor} type="button" >Add Field</button>
                       <Picker></Picker>
                       <div>
                         <pre>{JSON.stringify(Quantities, null, 2)}</pre>
@@ -768,7 +747,7 @@ function AddProduct() {
                       ))}
                     </select>
                   </div>
-                  <button
+                  <button type="button" 
                     style={{ width: "100%" }}
                     onClick={() => {
                       sizecoloraction();
@@ -817,7 +796,7 @@ function AddProduct() {
                     <label className="w-50" htmlFor="description">
                       Image {index + 1}
                     </label>
-                    <input type="file" onChange={handleChange} required />
+                    <input type="file" onChange={handleChange} />
                   </div>
                 </div>
               ))}
