@@ -42,10 +42,10 @@ function Orders() {
     setmonthFilter(event.target.value);
   };
 
-  const changed = (index, bool) => {
+  const changed = (index) => {
     const newArray = [...check];
 
-    newArray[index] = bool;
+    newArray[index] = !newArray[index];
 
     setcheck(newArray);
   };
@@ -65,8 +65,12 @@ function Orders() {
     query.month=monthFilter
 
     await OrdersApi.filter(query).then(e=>setOrderList(e))
-
 }
+
+useEffect(() => {
+  const initializedArray = Array.from({ length: OrderList.length }, () => false);
+  setcheck(initializedArray);
+}, [OrderList]); 
 
 
   useEffect(() => {
@@ -167,7 +171,7 @@ function Orders() {
               </option>
             ))}
           </select>
-          <button onClick={apply}>Apply</button>
+          <button onClick={apply}>Apply Action and Filter</button>
         </div>
 
         <div style={{ width: "100%" }}>
@@ -176,6 +180,7 @@ function Orders() {
               key={index}
               order={Order}
               index={index}
+              check={check}
               changed={changed}
             />
           ))}

@@ -20,12 +20,9 @@ export default function ViewOrders(props) {
   };
 
 
-  const [isChecked, setIsChecked] = useState(false);
-
   const handleCheckboxChange = () => {
-   
-    setIsChecked(!isChecked);
-    props.changed(props.index,!isChecked)
+
+    props.changed(props.index)
   };
   return (
     <div >
@@ -36,8 +33,8 @@ export default function ViewOrders(props) {
         <td >
         <input
         type="checkbox"
-        checked={isChecked}
-        onChange={handleCheckboxChange}
+        checked={props.check[props.ischecked]}
+        onClick={handleCheckboxChange}
       />
         </td>
         <td >

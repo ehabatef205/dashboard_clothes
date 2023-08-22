@@ -1,6 +1,6 @@
 import React from 'react'
 import './left_panel.css'
-function LeftPanel({ setpage }) {
+function LeftPanel({ setpage, logout }) {
   const changePage = (page) => {
     console.log(page.target.innerText)
     setpage(page.target.innerText)
@@ -31,7 +31,7 @@ function LeftPanel({ setpage }) {
             <h4>Products</h4>
             <ul>
               <li onClick={changePage} >Add Product</li>
-              <li onClick={changePage} >Add Product from excel</li>
+
               <li onClick={changePage}>Product</li>
               <li onClick={changePage}>Delete Product</li>
               <li onClick={changePage}>Update Product</li>
@@ -78,7 +78,7 @@ function LeftPanel({ setpage }) {
         <div className='left-panel-item left-sub-item'>
           <h4>Logout</h4>
           <ul>
-            <li onClick={changePage}>Logout</li>
+            <li onClick={logout}>Logout</li>
           </ul>
         </div>
       </div>

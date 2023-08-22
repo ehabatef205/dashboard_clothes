@@ -18,8 +18,10 @@ import UserView from './components/users';
 import { auth } from './api/ADMIN';
 import Superdeals from './components/Superdeals'
 import Firstvisit from './components/Firstvisit'
+import { Cookies } from 'react-cookie'
 
 function App() {
+  const cookie = new Cookies()
   const [page, setPage] = useState('#')
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   useState(()=>{
@@ -41,16 +43,21 @@ function App() {
     setIsLoggedIn(true);
   };
 
+  const handleLogout = () => {
+    cookie.remove("AuthAdmin")
+    setIsLoggedIn(false);
+  };
+
   return (
     <div className="App">
       {isLoggedIn ? <>
-        <LeftPanel setpage={setPage} />
+        <LeftPanel logout={handleLogout} setpage={setPage} />
         <div style={{ width: "100%", padding: "1%" }}>
           {page === '#' && <h1 className='d-flex bg-light mx-5  h-50 headerone'>welcome to our admin panel please choose what to do from the side panel.</h1>}
           {page === 'View Main Category' && <MainCategory />}
           {page === 'View Sub Category' && <SubCategory />}
           {page === 'Add Product' && <AddProduct />}
-          {page === 'Add Product from excel' && <AddProductFromExcel />}
+
           {page === 'Product' && <HiddenProduct />}
           {page === 'Delete Product' && <DeleteProduct />}
           {page === 'Update Product' && <UpdateProduct />}

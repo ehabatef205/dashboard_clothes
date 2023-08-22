@@ -202,8 +202,9 @@ function AddProduct() {
     });
   };
 
-  const addProduct = async () => {
-    const url = "http://localhost:5000/product/upload";
+  const addProduct = async (e) => {
+    e.preventDefault()
+    const url = "http://5.183.9.124:5000/product/upload";
     const formData = new FormData();
     for (let file of image) {
       formData.append("images", file);
@@ -376,7 +377,8 @@ function AddProduct() {
           <h1>Add Product</h1>
           <h3 className="text-danger">{sucessview}</h3>
         </div>
-        <div className=" col-12 h-75 my-5 ">
+        <form className="w-100"  onSubmit={addProduct}  >
+        <div className=" col-12 h-75 my-5 w-100">
           <div className="d-flex flex-wrap ">
             <div className="col-12 m-2 ">
               <label className="w-50" htmlFor="description">
@@ -506,11 +508,14 @@ function AddProduct() {
                 name="priceAfter"
                 id="priceAfter"
                 placeholder="Enter Price After"
-                onChange={(e) =>
-                  setFormData({
-                    ...formData1,
-                    price_after: e.target.value,
-                  })
+                onChange={(e) =>{
+                  if(parseInt(e.target.value) <= parseInt(formData1?.price_before)){
+                    setFormData({
+                      ...formData1,
+                      price_after: e.target.value,
+                    })
+                  }
+                }
                 }
                 required
               />
@@ -519,6 +524,9 @@ function AddProduct() {
             <div className="col-12 m-2 ">
               <label className="w-50" htmlFor="brandName">
                 Brand Name
+                <b className="text-danger" style={{ fontSize: "1.3rem" }}>
+                  *
+                </b>
               </label>
               <input
                 style={{ border: "1px solid gray" }}
@@ -631,23 +639,23 @@ function AddProduct() {
                   )}
                   {sizecolorstate === "color" && (
                     <div>
-                      <input
+                      {/* <input
                         type="text"
                         placeholder="Enter color hex"
                         value={newKey}
                         onChange={handleKeyChange}
-                      />
-                      <input
+                      /> */}
+                      {/* <input
                         type="number"
                         placeholder="Enter number of items"
                         value={newValue}
                         onChange={handleValueChange}
-                      />
-                      <button onClick={handleAddFieldcolor}>Add Field</button>
-
-                      <div>
+                      /> */}
+{/*                       <button onClick={handleAddFieldcolor}>Add Field</button>
+ */}
+                     {/*  <div>
                         <pre>{JSON.stringify(Quantities, null, 2)}</pre>
-                      </div>
+                      </div> */}
                     </div>
                   )}
                   {sizecolorstate === "sizecolor" && (
@@ -809,20 +817,18 @@ function AddProduct() {
                     <label className="w-50" htmlFor="description">
                       Image {index + 1}
                     </label>
-                    <input type="file" onChange={handleChange} />
+                    <input type="file" onChange={handleChange} required />
                   </div>
                 </div>
               ))}
             <button
               className="col-12 m-1 my-4 btn btn-secondary  "
-              onClick={() => {
-                addProduct();
-              }}
+              type="submit"
             >
               Add Product
             </button>
           </div>
-        </div>
+        </div></form>
       </div>
     </div>
   );
