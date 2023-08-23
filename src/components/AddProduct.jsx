@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { Route, Routes, useNavigate, useLocation } from "react-router-dom";
 import { SketchPicker } from "react-color";
 import "./add_products.css";
 import * as main_category from "../api/product_category";
@@ -35,7 +36,7 @@ function AddProduct() {
   };
   const [newMainKey, setNewMainKey] = useState("");
   const [newNestedKey, setNewNestedKey] = useState("");
-  const [newNestedValue, setNewNestedValue] = useState("");
+  const [newNestedValue, setNewNestedValue] = useState(0);
 
   const handleMainKeyChange = (event) => {
     setNewMainKey(event.target.value);
@@ -55,7 +56,7 @@ function AddProduct() {
         ...prevQuantities,
         [newMainKey]: {
           ...(prevQuantities[newMainKey] || {}),
-          [newNestedKey]: newNestedValue,
+          [newNestedKey]: parseInt(newNestedValue),
         },
       }));
       setNewNestedKey("");
@@ -63,7 +64,7 @@ function AddProduct() {
     }
   };
   const [newKey, setNewKey] = useState("");
-  const [newValue, setNewValue] = useState("");
+  const [newValue, setNewValue] = useState(0);
 
   const handleKeyChange = (event) => {
     setNewKey(event.target.value);
@@ -73,7 +74,6 @@ function AddProduct() {
     setNewValue(event.target.value);
   };
 
-  const [colorhex, setcolorhex] = useState("");
   const handleAddField = () => {
     if (newKey && newValue) {
       setQuantities((prevQuantities) => ({
@@ -81,17 +81,17 @@ function AddProduct() {
         [newKey]: parseInt(newValue),
       }));
       setNewKey("");
-      setNewValue("");
+      setNewValue(0);
     }
   };
   const handleAddFieldcolor = () => {
     if (newKey && newValue) {
       setQuantities((prevQuantities) => ({
         ...prevQuantities,
-        ["#" + newKey]: newValue,
+        ["#" + newKey]: parseInt(newValue),
       }));
       setNewKey("");
-      setNewValue("");
+      setNewValue(0);
     }
   };
   const [images, setImages] = useState(Array(5).fill(""));
@@ -100,14 +100,7 @@ function AddProduct() {
   const [Quantities, setQuantities] = useState({});
   const [categories, setCategories] = useState([]);
   const [selectedCategoryValue, setSelectedCategoryValue] = useState("");
-  const [Colors, setColors] = useState([
-    "red",
-    "blue",
-    "orange",
-    "black",
-    "white",
-    "green",
-  ]);
+
   const [gender, setgender] = useState("female");
   const genderarr = ["female", "male"];
   const vrposarr = ["tops", "bottoms", "outerwear", "allbody"];
@@ -173,9 +166,7 @@ function AddProduct() {
     };
     getCategory();
   }, []);
-  useEffect(() => {
-    setclength(Colors.length);
-  }, [Colors]);
+
 
   const getSubCategory = async (id) => {
     await sub_category.all_sub_category(id).then((e) => {
@@ -192,6 +183,7 @@ function AddProduct() {
     e.preventDefault()
     const url = "http://5.183.9.124:5000/product/upload";
     const formData = new FormData();
+    console.log(true,sizeable,colors)
     for (let file of image) {
       formData.append("images", file);
     }
@@ -215,8 +207,8 @@ function AddProduct() {
       }
     }
     formData.append("quantity",JSON.stringify(Quantities))
-    formData.append("colors",color==="true")
-    formData.append("sizeable",sizeable==="true")
+    formData.append("colors",color)
+    formData.append("sizeable",size)
     const config = {
       headers: {
         "content-type": "multipart/form-data",
@@ -652,7 +644,7 @@ function AddProduct() {
                         onChange={handleNestedKeyChange}
                       />
                       <input
-                        type="text"
+                        type="number"
                         placeholder="Enter quantity"
                         value={newNestedValue}
                         onChange={handleNestedValueChange}
