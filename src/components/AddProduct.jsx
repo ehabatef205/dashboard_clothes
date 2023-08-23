@@ -109,6 +109,7 @@ function AddProduct() {
   const [sec, setVRPOSsec] = useState("pants");
 
   const sentsuccess = () => {
+    setsizecolorselected(false)
     setQuantities({})
     setSelectedValue(1);
     setsize(false);
@@ -181,7 +182,7 @@ function AddProduct() {
 
   const addProduct = async (e) => {
     e.preventDefault()
-    const url = "http://5.183.9.124:5000/product/upload";
+    const url = "http://localhost:5000/product/upload";
     const formData = new FormData();
     console.log(true,sizeable,colors)
     for (let file of image) {
