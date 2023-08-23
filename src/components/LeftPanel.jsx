@@ -31,7 +31,6 @@ function LeftPanel({ setpage, logout }) {
             <h4>Products</h4>
             <ul>
               <li onClick={changePage} >Add Product</li>
-
               <li onClick={changePage}>Product</li>
               <li onClick={changePage}>Delete Product</li>
               <li onClick={changePage}>Update Product</li>

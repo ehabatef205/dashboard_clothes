@@ -5,13 +5,10 @@ import 'react-toastify/dist/ReactToastify.css';
 import './deals.css'
 import './delete.css'
 
-export function SearchBar({ onSearch }) {
+export function SearchBar({ query,setquery ,search }) {
 
 
-    const handleSearchInput = event => {
-      const searchQuery = event.target.value.toLowerCase();
-      onSearch(searchQuery);
-    };
+
   
     return (
       <div className="search-input-container  d-flex justify-content-center">
@@ -19,10 +16,11 @@ export function SearchBar({ onSearch }) {
           type="text"
           className="search-input"
           placeholder="Search Products"
-          
+          value={query}
+          onChange={(e)=>{setquery(e.target.value)}}
         />
         <i className="bi bi-search my-2 search-icon "role="button" 
-        // onClick={}
+        onClick={search}
          ></i>
       </div>
     );
@@ -34,16 +32,25 @@ export default function Superdeals() {
     
     
     const [products, setProducts] = useState([])
-
+    const [query, setquery] = useState("")
+    const getProducts = async () => {
+        await product.all_product().then(e => {
+            setProducts(e.response)
+            console.log(e.response)
+        })
+    }
     useEffect(() => {
-        const getProducts = async () => {
-            await product.all_product().then(e => {
-                setProducts(e.response)
-                console.log(e.response)
-            })
-        }
+        
         getProducts()
     }, [])
+    const search=() => {
+        if (query === "") getProducts();
+        else {
+          product.searchpage(query).then((e) => {
+            setProducts(e.response);
+          });
+        }
+      };
 
     
    
@@ -98,7 +105,7 @@ export default function Superdeals() {
                     >
                        
                         <div className="col-12 my-2" >
-                        <SearchBar></SearchBar>
+                        <SearchBar query={query}setquery={setquery} search={search}></SearchBar>
                         </div>
                         <table>
                             <thead>
@@ -143,23 +150,10 @@ export default function Superdeals() {
 
 function TrHiddenProduct(props) {
 
-    const [view, setView] = useState(props.product.view)
+    const [view, setView] = useState(false)
 
     const hidden = async (id) => {
-        await product.update_view_product(id, !view).then(res => {
-            setView(!view)
-          
-            if (view ===true){
-                toast.error("The product is hidden ", {
-                    position: toast.POSITION.TOP_RIGHT
-                  }) 
-               
-            }else{
-                toast.success("The product is viewed ", {
-                    position: toast.POSITION.TOP_RIGHT
-                  }) 
-            }
-        })
+        setView(!view)
     }
 
     return (

@@ -38,7 +38,9 @@ export const add_product = async (supplier_id, category_id, subCategory, typeOfP
 export const add_product_from_excel = async (excel) => {
     await axios.post(`${proxy}/excel`, excel, { headers: { 'content-type': 'multipart/form-data', } })
 }
-
+export const searchpage=async(query)=>{
+    return await((await axios.post(`${proxy}/searchpage/`,{query})).data)
+}
 export const add_products_from_excel = async (products) => {
     await axios.post(`${proxy}/from_excel`, { products: products })
 }
