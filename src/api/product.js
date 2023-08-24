@@ -98,4 +98,14 @@ export const get_product_by_type = async (_id, type) => {
     return (await (await axios.post(`${proxy}/type/${_id}`, { typeOfProduct: type })).data)
 }
 
+export const get_product_by_main_category = async (_id) => {
+    return (await (await axios.get(`${proxy}/main_category/${_id}`)).data)
+}
 
+export const get_product_first_visit = async (_id) => {
+    return (await (await axios.get(`${proxy}/first_visit/${_id}`)).data)
+}
+
+export const update_first_visit = async (id, view) => {
+    await axios.put(`${proxy}/update_first_visit/${id}`, { first_visit: view })
+}
