@@ -88,7 +88,7 @@ function AddProduct() {
     if (newKey && newValue) {
       setQuantities((prevQuantities) => ({
         ...prevQuantities,
-        ["#" + newKey]: parseInt(newValue),
+        [newKey]: parseInt(newValue),
       }));
       setNewKey("");
       setNewValue(0);
@@ -582,7 +582,7 @@ function AddProduct() {
                         
                         placeholder="Enter avilable amount"
                         onChange={(e) =>
-                          setQuantities({avilable:e.target.value})
+                          setQuantities({avilable:parseInt(e.target.value)})
                         }
                         required
                       />
