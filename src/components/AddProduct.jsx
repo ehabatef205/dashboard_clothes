@@ -60,7 +60,7 @@ function AddProduct() {
         },
       }));
       setNewNestedKey("");
-      setNewNestedValue("");
+      setNewNestedValue(0);
     }
   };
   const [newKey, setNewKey] = useState("");
@@ -109,6 +109,7 @@ function AddProduct() {
   const [sec, setVRPOSsec] = useState("pants");
 
   const sentsuccess = () => {
+    setsizecolorstate("")
     setsizecolorselected(false)
     setQuantities({})
     setSelectedValue(1);
