@@ -183,7 +183,7 @@ function AddProduct() {
 
   const addProduct = async (e) => {
     e.preventDefault()
-    const url = "https://fair-gold-moose-wig.cyclic.cloud/product/upload";
+    const url = "http://localhost:5000/product/upload";
     const formData = new FormData();
     console.log(true,sizeable,colors)
     for (let file of image) {
