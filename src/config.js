@@ -1,1 +1,1 @@
-    export const backend_url = 'https://www.mohamed-alaa.com'
+export const backend_url = 'http://5.183.9.124:8080'
