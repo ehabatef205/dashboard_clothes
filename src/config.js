@@ -1,1 +1,1 @@
-    export const backend_url = 'http://5.183.9.124:5000'
+    export const backend_url = 'https://wolf-back-a8rzk.ondigitalocean.app'
