@@ -183,7 +183,7 @@ function AddProduct() {
 
   const addProduct = async (e) => {
     e.preventDefault()
-    const url = "https://wolf-back-a8rzk.ondigitalocean.app/product/upload";
+    const url = "https://www.mohamed-alaa.com/product/upload";
     const formData = new FormData();
     console.log(true,sizeable,colors)
     for (let file of image) {
