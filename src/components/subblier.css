@@ -11,9 +11,6 @@ form {
   }
   
   /* Styles for the form fields and labels */
-  form div {
-    margin-bottom: 15px;
-  }
   
   label {
     display: block;

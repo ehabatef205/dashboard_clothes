@@ -47,6 +47,11 @@ const CreateSupplier = () => {
 
     if(Object.keys(validationErrors).length === 0) {
         alert("Form Submitted successfully")
+        add_supplier(formData.name,formData.email,formData.password).then(e=>{
+          toast.success("Done ", {
+            position: toast.POSITION.TOP_RIGHT
+          })
+        })
     }
 
   }

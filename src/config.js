@@ -1,1 +1,1 @@
-    export const backend_url = 'http://5.183.9.124:5000'
+    export const backend_url = 'https://fair-gold-moose-wig.cyclic.cloud'

@@ -183,7 +183,7 @@ function AddProduct() {
 
   const addProduct = async (e) => {
     e.preventDefault()
-    const url = "http://5.183.9.124:5000/product/upload";
+    const url = "https://fair-gold-moose-wig.cyclic.cloud/product/upload";
     const formData = new FormData();
     console.log(true,sizeable,colors)
     for (let file of image) {
@@ -802,6 +802,7 @@ function AddProduct() {
             </button>
           </div>
         </div></form>
+
       </div>
     </div>
   );
@@ -825,14 +826,16 @@ const Picker = () => {
           width: 50,
           height: 50,
           border: "2px solid white",
+          marginBottom: "0px"
         }}
       ></div>
-      <SketchPicker
+      <SketchPicker 
         onChange={(color) => {
           setSketchPickerColor(color.rgb);
         }}
         color={sketchPickerColor}
       />
+      <SketchPicker />
     </div>
   );
 };
