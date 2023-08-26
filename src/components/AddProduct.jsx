@@ -790,7 +790,7 @@ function AddProduct() {
                     <label className="w-50" htmlFor="description">
                       Image {index + 1}
                     </label>
-                    <input type="file" onChange={handleChange} />
+                    <input type="file" onChange={handleChange} required={index===0}/>
                   </div>
                 </div>
               ))}
