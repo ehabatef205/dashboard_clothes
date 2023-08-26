@@ -65,10 +65,9 @@ function App() {
           {page === 'First visit' && <Firstvisit />}
           {page === 'Super deals' && <Superdeals/>}
           {page === 'Returns' && <Returns/>}
-          {page === 'Shipping' && <h1 className='d-flex bg-light mx-5  h-50 headerone'>Operation Under Design</h1>}
-          {page === 'Analytics' && <h1 className='d-flex bg-light mx-5  h-50 headerone'>Waitting for real Analytics  .</h1>}
+          {page === 'Shipping' && <h1 className='d-flex bg-light mx-5  h-50 headerone'>Waiting for operation Cycle</h1>}
+          {page === 'Analytics' && <h1 className='d-flex bg-light mx-5  h-50 headerone'>Waiting for real Payment and Operations  .</h1>}
           {page === 'Users' && <UserView />}
-          {page === 'Ban User' && <PanUser />}
           {page === 'Create Supplier' && <CreateSupplier />}
           {page === 'Edit Suppliers' && <SupplierList />}
           {page === 'Logout' && <h1 className='d-flex bg-light mx-5  h-50 headerone'>welcome to our admin panel please choose what to do from the side panel.</h1>}

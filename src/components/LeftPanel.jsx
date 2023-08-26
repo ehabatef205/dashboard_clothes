@@ -52,7 +52,6 @@ function LeftPanel({ setpage, logout }) {
           <h4>User</h4>
           <ul>
             <li onClick={changePage}>Users</li>
-            <li onClick={changePage}>Ban User</li>
           </ul>
         </div>
         <div className='left-panel-item left-sub-item'>
