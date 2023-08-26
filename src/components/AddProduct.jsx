@@ -835,7 +835,6 @@ const Picker = () => {
         }}
         color={sketchPickerColor}
       />
-      <SketchPicker />
     </div>
   );
 };
